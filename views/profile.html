@@ -1,0 +1,439 @@
+<div class="row" style="background-color: lightblue">
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <img src="/image/users.png" class="img-responsive img-circle" height="100px">
+        {{user.name}}
+        <p>{{user.email}}</p>
+        {{#if user.address.city}}
+        <label>Profile Overview</label>
+        <p>{{user.address.city}}</p>
+        {{else}}
+        <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#addAddress">Open Modal</button>
+        {{/if}}
+    </div>
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        {{#if user.profile_overview}}
+        <label>Profile Overview</label>
+        <p>{{user.profile_overview}}</p>
+        {{else}}
+        <form method="post" action="/profile/editprofile">
+            <div class="form-group">
+                <label>Profile Overview</label>
+                <textarea class="form-control" rows="5" name="profile_overview" placeholder="Enter profile_overview"></textarea>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        {{/if}}
+        {{#if experience}}
+        <p> experiences will show here</p>
+        {{/if}}
+        <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#addExperience">Add Experience</button>
+        {{#if education}}
+        <p> education will show here</p>
+        {{else}}
+        <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#addEducation">Add Education</button>
+        {{/if}}
+        {{#if certificate}}
+        <p> certificates will show here</p>
+        {{else}}
+        <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#addCertificate">Add Certificate</button>
+        {{/if}}
+        {{#if award}}
+        <p> awards will show here</p>
+        {{else}}
+        <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#addAward">Add Award</button>
+        {{/if}}
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addAddress" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/profile/editprofile">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" name="city" placeholder="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" class="form-control" name="state" placeholder="state" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pincode</label>
+                        <input type="text" class="form-control" name="pincode" placeholder="pincode" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" class="form-control" name="country" placeholder="country" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea class="form-control" rows="2" name="address" placeholder="Enter profile_overview" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addExperience" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <form method="post" id="add-experience">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control" id="job_title" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Company Name</label>
+                                <input type="text" class="form-control" id="company_name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <div class='input-group date datetimepicker1'>
+                                    <input type='text' class="form-control" id="experience_start_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <div class='input-group date datetimepicker2'>
+                                    <input type='text' class="form-control" id="experience_end_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" class="form-control" id="experience_location" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="2" id="experience_description" required></textarea>
+                    </div>
+                </div>
+                <h3>Projects</h3>
+                <div class="row">
+                    <div id="addedprojects"></div>
+                    <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#addProject">Add Project</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addEducation" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/profile/editprofile">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" name="city" placeholder="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" class="form-control" name="state" placeholder="state" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pincode</label>
+                        <input type="text" class="form-control" name="pincode" placeholder="pincode" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" class="form-control" name="country" placeholder="country" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea class="form-control" rows="2" name="address" placeholder="Enter profile_overview" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addCertificate" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/profile/editprofile">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" name="city" placeholder="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" class="form-control" name="state" placeholder="state" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pincode</label>
+                        <input type="text" class="form-control" name="pincode" placeholder="pincode" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" class="form-control" name="country" placeholder="country" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea class="form-control" rows="2" name="address" placeholder="Enter profile_overview" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addAward" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/profile/editprofile">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" name="city" placeholder="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" class="form-control" name="state" placeholder="state" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pincode</label>
+                        <input type="text" class="form-control" name="pincode" placeholder="pincode" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" class="form-control" name="country" placeholder="country" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea class="form-control" rows="2" name="address" placeholder="Enter profile_overview" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addProject" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" role="form" class="form-horizontal" id="add-project">
+                    <div class="row">
+                        <div class="Col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label>Project Nmae</label>
+                                <input type="text" class="form-control" id="project_name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Skills</label>
+                                <input type="text" class="form-control" id="skills" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>App Link</label>
+                                <input type="text" class="form-control" id="app_link" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <div class='input-group date datetimepicker1'>
+                                    <input type='text' class="form-control" id="project_start_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <div class='input-group date datetimepicker2'>
+                                    <input type='text' class="form-control" id="project_end_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="2" id="project_description" required></textarea>
+                    </div>
+                    <button class="btn btn-default" type="submit">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var addproject = document.getElementById('add-project');
+addproject.addEventListener('submit', addProjects);
+projectarr = [];
+// addedprojects 
+function addProjects(e) {
+    // Prevent actual submit
+    e.preventDefault();
+    project_name = document.getElementById('project_name').value;
+    skills = document.getElementById('skills').value;
+    app_link = document.getElementById('app_link').value;
+    project_start_date = document.getElementById('project_start_date').value;
+    project_end_date = document.getElementById('project_end_date').value;
+    project_description = document.getElementById('project_description').value;
+    obj = {}
+    obj['project_name'] = project_name;
+    obj['start_date'] = project_start_date;
+    obj['end_date'] = project_end_date;
+    obj['skills'] = skills;
+    obj['app_link'] = app_link;
+    obj['description'] = project_description;
+    projectarr.push(obj)
+    var codeBlock = '';
+    for (var i = 0; i < projectarr.length; i++) {
+        console.log(projectarr[i].project_name)
+        codeBlock += '<div class="col-md-3 col-sm-4 col-xs-6">' +
+            '<h4>' + projectarr[i].project_name + '</h4>' +
+            '<p>' + projectarr[i].skills + ' | ' + projectarr[i].app_link + '</p>' +
+            '<p>' + projectarr[i].description + '</p>' +
+            '</div>'
+    }
+    document.getElementById("addedprojects").innerHTML = codeBlock;
+    document.getElementById('project_name').value = '';
+    document.getElementById('skills').value = '';
+    document.getElementById('app_link').value = '';
+    document.getElementById('project_start_date').value = '';
+    document.getElementById('project_end_date').value = '';
+    document.getElementById('project_description').value = '';
+
+    var modal = document.getElementById('addProject');
+    modal.click(function() {
+        modal.modal('hide');
+    });
+
+}
+// add-experience
+var addexperience = document.getElementById('add-experience');
+addexperience.addEventListener('submit', addExperiences);
+
+function addExperiences(e) {
+    // Prevent actual submit
+    e.preventDefault();
+    job_title = document.getElementById('job_title').value;
+    company_name = document.getElementById('company_name').value;
+    start_date = document.getElementById('experience_start_date').value;
+    end_date = document.getElementById('experience_end_date').value;
+    location = document.getElementById('experience_location').value;
+    description = document.getElementById('experience_description').value;
+
+    axios.post('/profile/addexperience/{{user._id}}', {
+        job_title: job_title,
+        company_name: company_name,
+        start_date: start_date,
+        end_date: end_date,
+        location: location,
+        description: description,
+        projects: projectarr,
+    }).then(function(response) {
+        console.log(response.data);
+        var modal = document.getElementById('addExperience');
+        modal.click(function() {
+            modal.modal('hide');
+        });
+
+        document.getElementById('job_title').value = '';
+        document.getElementById('company_name').value = '';
+        document.getElementById('experience_start_date').value = '';
+        document.getElementById('experience_end_date').value = '';
+        document.getElementById('experience_location').value = '';
+        document.getElementById('project_description').value = '';
+        Swal.fire({
+            position: 'top-end',
+            type: 'success',
+            title: 'Your password has been updated',
+            showConfirmButton: false,
+            timer: 2000
+        })
+    });
+}
+</script>
