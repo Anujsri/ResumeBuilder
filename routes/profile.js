@@ -86,13 +86,6 @@ router.post('/experience/:id', ensureAuthenticated, (req, res) => {
             description = req.body.description;
             projects = req.body.projects;
 
-            console.log("job_title" + job_title);
-            console.log("company_name" + company_name);
-            console.log("start_date" + start_date);
-            console.log("end_date" + end_date);
-            console.log("description" + description);
-            console.log("projects" + projects);
-
             var experienceadd = new Experience({
                 job_title: job_title,
                 company_name: company_name,
@@ -107,6 +100,104 @@ router.post('/experience/:id', ensureAuthenticated, (req, res) => {
                 if (err) return err;
                 req.flash('success_msg', 'You profile is saved!');
                 res.json(experience);
+            });
+        } else {
+            let msg = "User not found with id";
+            res.json(msg);
+        }
+
+    });
+})
+
+router.post('/education/:id', ensureAuthenticated, (req, res) => {
+    user_id = req.params.id;
+    User.findById(user_id, (err, user) => {
+        if (err) throw err;
+        else if (user) {
+            degree = req.body.degree;
+            institute_name = req.body.institute_name;
+            start_date = req.body.start_date;
+            end_date = req.body.end_date;
+            location = req.body.location;
+            description = req.body.description;
+
+            var expeducation = new Education({
+                degree: degree,
+                institute_name : institute_name,
+                start_date : start_date,
+                end_date : end_date,
+                location : location,
+                description : description,
+                user_id : user_id
+            });
+            expeducation.save((err, education) => {
+                if (err) return err;
+                req.flash('success_msg', 'You profile is saved!');
+                res.json(education);
+            });
+        } else {
+            let msg = "User not found with id";
+            res.json(msg);
+        }
+
+    });
+})
+
+router.post('/certificate/:id', ensureAuthenticated, (req, res) => {
+    user_id = req.params.id;
+    User.findById(user_id, (err, user) => {
+        if (err) throw err;
+        else if (user) {
+            certificate_name = req.body.certificate_name;
+            institute_name = req.body.institute_name;
+            start_date = req.body.start_date;
+            end_date = req.body.end_date;
+            location = req.body.location;
+            description = req.body.description;
+
+            var certificate = new Certificate({
+                certificate_name : certificate_name,
+                institute_name : institute_name,
+                start_date : start_date,
+                end_date : end_date,
+                location : location,
+                description : description,
+                user_id : user_id
+            });
+            certificate.save((err, certificate) => {
+                if (err) return err;
+                req.flash('success_msg', 'You profile is saved!');
+                res.json(certificate);
+            });
+        } else {
+            let msg = "User not found with id";
+            res.json(msg);
+        }
+
+    });
+})
+
+router.post('/award/:id', ensureAuthenticated, (req, res) => {
+    user_id = req.params.id;
+    User.findById(user_id, (err, user) => {
+        if (err) throw err;
+        else if (user) {
+            award_name = req.body.award_name;
+            date = req.body.date;
+            institute_name = req.body.institute_name;
+            description = req.body.description;
+
+            var award = new Award({
+                award_name : award_name,
+                date : date,
+                institute_name : institute_name,
+                description : description,
+                user_id : user_id
+            });
+            award.save((err, award) => {
+                if (err) return err;
+                req.flash('success_msg', 'You profile is saved!');
+                res.json(award);
             });
         } else {
             let msg = "User not found with id";
