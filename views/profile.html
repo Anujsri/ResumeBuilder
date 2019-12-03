@@ -1,3 +1,4 @@
+<input type='hidden' id="user_id" value="{{user._id}}">
 <div class="row" style="background-color: lightblue">
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
         <img src="/image/users.png" class="img-responsive img-circle" height="100px">
@@ -57,23 +58,23 @@
                 <form method="post" action="/profile/editprofile">
                     <div class="form-group">
                         <label>City</label>
-                        <input type="text" class="form-control" name="city" placeholder="city" required>
+                        <input type="text" class="form-control" name="city" required>
                     </div>
                     <div class="form-group">
                         <label>State</label>
-                        <input type="text" class="form-control" name="state" placeholder="state" required>
+                        <input type="text" class="form-control" name="state" required>
                     </div>
                     <div class="form-group">
                         <label>Pincode</label>
-                        <input type="text" class="form-control" name="pincode" placeholder="pincode" required>
+                        <input type="text" class="form-control" name="pincode" required>
                     </div>
                     <div class="form-group">
                         <label>Country</label>
-                        <input type="text" class="form-control" name="country" placeholder="country" required>
+                        <input type="text" class="form-control" name="country" required>
                     </div>
                     <div class="form-group">
                         <label>Address</label>
-                        <textarea class="form-control" rows="2" name="address" placeholder="Enter profile_overview" required></textarea>
+                        <textarea class="form-control" rows="2" name="address" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
@@ -173,7 +174,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
                                 <label>degree</label>
-                                <input type="text" class="form-control" id="degree" placeholder="country" required>
+                                <input type="text" class="form-control" id="degree" required>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -203,7 +204,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <div class="form-group">
                                 <label>Institute Name</label>
-                                <input type="text" class="form-control" id="institute_name" placeholder="city" required>
+                                <input type="text" class="form-control" id="institute_name" required>
                             </div>
                         </div>
                         <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -216,7 +217,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label>description</label>
-                            <textarea class="form-control" rows="2" id="education_description" placeholder="Enter profile_overview" required></textarea>
+                            <textarea class="form-control" rows="2" id="education_description" required></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
@@ -286,7 +287,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                             <label>Description</label>
-                            <textarea class="form-control" rows="2" id="certificate_description" placeholder="Enter profile_overview" required></textarea>
+                            <textarea class="form-control" rows="2" id="certificate_description" required></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>
@@ -419,216 +420,11 @@
         </div>
     </div>
 </div>
+
+<script src="../js/project.js"></script>
+<script src="../js/experience.js"></script>
+<script src="../js/education.js"></script>
+<script src="../js/certificate.js"></script>
+<script src="../js/award.js"></script>
 <script type="text/javascript">
-var addproject = document.getElementById('add-project');
-addproject.addEventListener('submit', addProjects);
-projectarr = [];
-// addedprojects 
-function addProjects(e) {
-    // Prevent actual submit
-    e.preventDefault();
-    project_name = document.getElementById('project_name').value;
-    skills = document.getElementById('skills').value;
-    app_link = document.getElementById('app_link').value;
-    project_start_date = document.getElementById('project_start_date').value;
-    project_end_date = document.getElementById('project_end_date').value;
-    project_description = document.getElementById('project_description').value;
-    obj = {}
-    obj['project_name'] = project_name;
-    obj['start_date'] = project_start_date;
-    obj['end_date'] = project_end_date;
-    obj['skills'] = skills;
-    obj['app_link'] = app_link;
-    obj['description'] = project_description;
-    projectarr.push(obj)
-    var codeBlock = '';
-    for (var i = 0; i < projectarr.length; i++) {
-        codeBlock += '<div class="col-md-3 col-sm-4 col-xs-6">' +
-            '<h4>' + projectarr[i].project_name + '</h4>' +
-            '<p>' + projectarr[i].skills + ' | ' + projectarr[i].app_link + '</p>' +
-            '<p>' + projectarr[i].description + '</p>' +
-            '</div>'
-    }
-    document.getElementById("addedprojects").innerHTML = codeBlock;
-    document.getElementById('project_name').value = '';
-    document.getElementById('skills').value = '';
-    document.getElementById('app_link').value = '';
-    document.getElementById('project_start_date').value = '';
-    document.getElementById('project_end_date').value = '';
-    document.getElementById('project_description').value = '';
-
-    var modal = document.getElementById('addProject');
-    modal.click(function() {
-        modal.modal('hide');
-    });
-
-}
-// add-experience
-var addexperience = document.getElementById('add-experience');
-addexperience.addEventListener('submit', addExperiences);
-
-function addExperiences(e) {
-    // Prevent actual submit
-    e.preventDefault();
-    job_title = document.getElementById('job_title').value;
-    company_name = document.getElementById('company_name').value;
-    start_date = document.getElementById('experience_start_date').value;
-    end_date = document.getElementById('experience_end_date').value;
-    // location = document.getElementById('experience_location').value;
-    description = document.getElementById('experience_description').value;
-
-    axios.post('/profile/experience/{{user._id}}', {
-        job_title: job_title,
-        company_name: company_name,
-        start_date: start_date,
-        end_date: end_date,
-        location: "kanpur",
-        description: description,
-        projects: projectarr,
-    }).then(function(response) {
-        console.log(response.data);
-        var modal = document.getElementById('addExperience');
-        modal.click(function() {
-            modal.modal('hide');
-        });
-
-        document.getElementById('job_title').value = '';
-        document.getElementById('company_name').value = '';
-        document.getElementById('experience_start_date').value = '';
-        document.getElementById('experience_end_date').value = '';
-        // document.getElementById('experience_location').value = '';
-        document.getElementById('project_description').value = '';
-        Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Your password has been updated',
-            showConfirmButton: false,
-            timer: 2000
-        })
-    });
-}
-
-var addeducation = document.getElementById('add-education');
-addeducation.addEventListener('submit', addEducations);
-
-function addEducations(e) {
-    // Prevent actual submit
-    e.preventDefault();
-    degree = document.getElementById('degree').value;
-    start_date = document.getElementById('education_start_date').value;
-    end_date = document.getElementById('education_end_date').value;
-    institute_name = document.getElementById('institute_name').value;
-    // location = document.getElementById('education_location').value;
-    description = document.getElementById('education_description').value;
-
-    axios.post('/profile/education/{{user._id}}', {
-        degree: degree,
-        start_date: start_date,
-        end_date: end_date,
-        location: "Jabalpur",
-        description: description,
-        institute_name: institute_name,
-    }).then(function(response) {
-        console.log(response.data);
-        var modal = document.getElementById('addEducation');
-        modal.click(function() {
-            modal.modal('hide');
-        });
-
-        document.getElementById('degree').value = '';
-        document.getElementById('education_start_date').value = '';
-        document.getElementById('education_end_date').value = '';
-        document.getElementById('institute_name').value = '';
-        // document.getElementById('education_location').value = '';
-        document.getElementById('education_description').value = '';
-        Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Your password has been updated',
-            showConfirmButton: false,
-            timer: 2000
-        })
-    });
-}
-
-var addcertificate = document.getElementById('add-certificate');
-addcertificate.addEventListener('submit', addCertificate);
-
-function addCertificate(e) {
-    // Prevent actual submit
-    e.preventDefault();
-    certificate_name = document.getElementById('certificate_name').value;
-    start_date = document.getElementById('certificate_start_date').value;
-    end_date = document.getElementById('certificate_end_date').value;
-    institute_name = document.getElementById('certificate_institute_name').value;
-    // location = document.getElementById('education_location').value;
-    description = document.getElementById('certificate_description').value;
-
-    axios.post('/profile/certificate/{{user._id}}', {
-        certificate_name: certificate_name,
-        start_date: start_date,
-        end_date: end_date,
-        location: "Jabalpur",
-        description: description,
-        institute_name: institute_name,
-    }).then(function(response) {
-        console.log(response.data);
-        var modal = document.getElementById('addCertificate');
-        modal.click(function() {
-            modal.modal('hide');
-        });
-
-        document.getElementById('certificate_name').value = '';
-        document.getElementById('certificate_start_date').value = '';
-        document.getElementById('certificate_end_date').value = '';
-        document.getElementById('certificate_institute_name').value = '';
-        // document.getElementById('education_location').value = '';
-        document.getElementById('certificate_description').value = '';
-        Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Your password has been updated',
-            showConfirmButton: false,
-            timer: 2000
-        })
-    });
-}
-
-var addaward = document.getElementById('add-award');
-addaward.addEventListener('submit', addAward);
-
-function addAward(e) {
-    // Prevent actual submit
-    e.preventDefault();
-    award_name = document.getElementById('award_name').value;
-    date = document.getElementById('award_date').value;
-    institute_name = document.getElementById('award_institute_name').value;
-    description = document.getElementById('award_description').value;
-
-    axios.post('/profile/award/{{user._id}}', {
-        award_name: award_name,
-        date: date,
-        institute_name: institute_name,
-        description: description
-    }).then(function(response) {
-        console.log(response.data);
-        var modal = document.getElementById('addAward');
-        modal.click(function() {
-            modal.modal('hide');
-        });
-
-        document.getElementById('award_name').value = '';
-        document.getElementById('award_date').value = '';
-        document.getElementById('award_institute_name').value = '';
-        document.getElementById('award_description').value = '';
-        Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Your password has been updated',
-            showConfirmButton: false,
-            timer: 2000
-        })
-    });
-}
-
 </script>
