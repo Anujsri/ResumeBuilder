@@ -195,7 +195,11 @@ router.post('/award/:id', ensureAuthenticated, (req, res) => {
                 user_id : user_id
             });
             award.save((err, award) => {
-                if (err) return err;
+                if (err){
+                    console.log("addAward error : "+err);
+                    let message = err;
+                    res.status(422).send({message : message,data : {}});
+                } 
                 req.flash('success_msg', 'You profile is saved!');
                 res.json(award);
             });

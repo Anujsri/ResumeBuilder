@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
-
-// User Schema
+var uniqueValidator = require('mongoose-unique-validator');
+// Award Schema
 var AwardSchema = mongoose.Schema({
     award_name: {
-        type: String
+        type: String,
+        unique: true
     },
     date: {
         type: Date
@@ -19,6 +20,7 @@ var AwardSchema = mongoose.Schema({
     }
 });
 
+AwardSchema.plugin(uniqueValidator);
 var Award = module.exports = mongoose.model('Award', AwardSchema);
 module.exports.addAward = (newAward, callback) => {
     newAward.save(callback);

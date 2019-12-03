@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 // User Schema
 var CertificateSchema = mongoose.Schema({
     certificate_name: {
-        type: String
+        type: String,
+        unique: true
     },
     start_date: {
         type: Date

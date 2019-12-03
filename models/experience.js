@@ -11,7 +11,8 @@ var ExperienceSchema = mongoose.Schema({
         type: Date
     },
     company_name: {
-        type: String
+        type: String,
+        unique: true 
     },
     location: {
         type: String
