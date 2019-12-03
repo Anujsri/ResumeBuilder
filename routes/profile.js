@@ -73,35 +73,42 @@ router.post('/editprofile/:id', ensureAuthenticated, (req, res) => {
     })
 })
 
-router.post('/addexperience/:id', ensureAuthenticated, (req, res) => {
+router.post('/experience/:id', ensureAuthenticated, (req, res) => {
     user_id = req.params.id;
     User.findById(user_id, (err, user) => {
         if (err) throw err;
         else if (user) {
-            job_title = req.user.job_title;
-            company_name = req.user.company_name;
-            start_date = req.user.start_date;
-            end_date = req.user.end_date;
-            location = req.user.location;
-            description = req.user.description;
-            projects = req.user.projects;
+            job_title = req.body.job_title;
+            company_name = req.body.company_name;
+            start_date = req.body.start_date;
+            end_date = req.body.end_date;
+            location = req.body.location;
+            description = req.body.description;
+            projects = req.body.projects;
+
+            console.log("job_title" + job_title);
+            console.log("company_name" + company_name);
+            console.log("start_date" + start_date);
+            console.log("end_date" + end_date);
+            console.log("description" + description);
+            console.log("projects" + projects);
 
             var experienceadd = new Experience({
-                job_title : job_title,
-                company_name : company_name,
-                start_date : start_date,
-                end_date : end_date,
-                location : location,
-                description : description,
-                projects : projects
+                job_title: job_title,
+                company_name: company_name,
+                start_date: start_date,
+                end_date: end_date,
+                location: location,
+                description: description,
+                projects: projects,
+                user_id : user_id
             });
             experienceadd.save((err, experience) => {
                 if (err) return err;
                 req.flash('success_msg', 'You profile is saved!');
                 res.json(experience);
             });
-        }
-        else{
+        } else {
             let msg = "User not found with id";
             res.json(msg);
         }

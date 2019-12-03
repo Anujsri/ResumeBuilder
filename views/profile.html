@@ -93,7 +93,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Modal Header</h4>
             </div>
-            <form method="post" id="add-experience">
+            <form id="add-experience" role="form" class="form-horizontal">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -132,12 +132,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
                                 <label>Location</label>
                                 <input type="text" class="form-control" id="experience_location" required />
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="form-group">
                         <label>Description</label>
@@ -371,7 +371,6 @@ function addProjects(e) {
     projectarr.push(obj)
     var codeBlock = '';
     for (var i = 0; i < projectarr.length; i++) {
-        console.log(projectarr[i].project_name)
         codeBlock += '<div class="col-md-3 col-sm-4 col-xs-6">' +
             '<h4>' + projectarr[i].project_name + '</h4>' +
             '<p>' + projectarr[i].skills + ' | ' + projectarr[i].app_link + '</p>' +
@@ -398,20 +397,25 @@ addexperience.addEventListener('submit', addExperiences);
 
 function addExperiences(e) {
     // Prevent actual submit
+    console.log("========================= e" + e)
     e.preventDefault();
     job_title = document.getElementById('job_title').value;
     company_name = document.getElementById('company_name').value;
     start_date = document.getElementById('experience_start_date').value;
     end_date = document.getElementById('experience_end_date').value;
-    location = document.getElementById('experience_location').value;
+    // location = document.getElementById('experience_location').value;
     description = document.getElementById('experience_description').value;
-
-    axios.post('/profile/addexperience/{{user._id}}', {
+    console.log("job_title"+ job_title);
+    console.log("company_name"+ company_name);
+    console.log("start_date"+ start_date);
+    console.log("end_date"+ end_date);
+    console.log("description"+ description);
+    axios.post('/profile/experience/{{user._id}}', {
         job_title: job_title,
         company_name: company_name,
         start_date: start_date,
         end_date: end_date,
-        location: location,
+        location: "kanpur",
         description: description,
         projects: projectarr,
     }).then(function(response) {
@@ -425,11 +429,11 @@ function addExperiences(e) {
         document.getElementById('company_name').value = '';
         document.getElementById('experience_start_date').value = '';
         document.getElementById('experience_end_date').value = '';
-        document.getElementById('experience_location').value = '';
+        // document.getElementById('experience_location').value = '';
         document.getElementById('project_description').value = '';
         Swal.fire({
             position: 'top-end',
-            type: 'success',
+            icon: 'success',
             title: 'Your password has been updated',
             showConfirmButton: false,
             timer: 2000
