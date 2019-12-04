@@ -1,14 +1,15 @@
 <input type='hidden' id="user_id" value="{{user._id}}">
-<div class="row" style="background-color: lightblue">
+<div class="row" style="background-color: lightblue;padding: 50px">
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
         <img src="/image/users.png" class="img-responsive img-circle" height="100px">
-        {{user.name}}
-        <p>{{user.email}}</p>
+        <br>
+        <center>{{user.name}}</center>
+        <p><i class="fa fa-envelope" aria-hidden="true"></i> {{user.email}}</p>
+        <p><i class="glyphicon glyphicon-phone-alt" aria-hidden="true"></i> {{user.phone}}</p>
         {{#if user.address.city}}
-        <label>Profile Overview</label>
-        <p>{{user.address.city}}</p>
+        <p><i class="fa fa-globe" aria-hidden="true"></i> {{user.address.city}}, {{user.address.country}}</p>
         {{else}}
-        <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#addAddress">Open Modal</button>
+        <i class="glyphicon glyphicon-home"></i> <button type="button" class="btn btn-info btn-md" onclick="addAddress()">Add Address</button>
         {{/if}}
     </div>
     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
@@ -46,45 +47,6 @@
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="addAddress" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-            </div>
-            <div class="modal-body">
-                <form method="post" action="/profile/editprofile">
-                    <div class="form-group">
-                        <label>City</label>
-                        <input type="text" class="form-control" name="city" required>
-                    </div>
-                    <div class="form-group">
-                        <label>State</label>
-                        <input type="text" class="form-control" name="state" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Pincode</label>
-                        <input type="text" class="form-control" name="pincode" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Country</label>
-                        <input type="text" class="form-control" name="country" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Address</label>
-                        <textarea class="form-control" rows="2" name="address" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Modal -->
 <div class="modal fade" id="addExperience" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -420,11 +382,118 @@
         </div>
     </div>
 </div>
-
 <script src="../js/project.js"></script>
 <script src="../js/experience.js"></script>
 <script src="../js/education.js"></script>
 <script src="../js/certificate.js"></script>
 <script src="../js/award.js"></script>
 <script type="text/javascript">
+async function addAddress() {
+    try {
+        const { value: formValues } = await Swal.fire({
+            title: 'Address',
+            confirmButtonText: 'Submit',
+            showCancelButton: true,
+            cancelButtonColor: '#d33',
+            html: '<div class="modal-body">' +
+                '<form method="post" action="/profile/editprofile">' +
+                '<div class="row">' +
+                '<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">' +
+                '<div class="form-group">' +
+                '<label>City</label>' +
+                '<input type="text" class="form-control" id="swal-input1" required>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">' +
+                '<div class="form-group">' +
+                '<label>State</label>' +
+                '<input type="text" class="form-control" id="swal-input2" required>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">' +
+                '<div class="form-group">' +
+                '<label>Pincode</label>' +
+                '<input type="number" class="form-control" id="swal-input3" required>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="row">' +
+                '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">' +
+                '<div class="form-group">' +
+                '<label>Country</label>' +
+                '<input type="text" class="form-control" id="swal-input4" required>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">' +
+                '<div class="form-group">' +
+                '<label>Address</label>' +
+                '<textarea class="form-control" rows="2" id="swal-input5" required></textarea>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</form>' +
+                '</div>',
+            focusConfirm: true,
+            preConfirm: () => {
+                let count = 0;
+                let arr = []
+                arr.push({ input_name: document.getElementById('swal-input1'), id: "swal-input1" });
+                arr.push({ input_name: document.getElementById('swal-input2'), id: "swal-input2" });
+                arr.push({ input_name: document.getElementById('swal-input3'), id: "swal-input3" });
+                arr.push({ input_name: document.getElementById('swal-input4'), id: "swal-input4" });
+                arr.push({ input_name: document.getElementById('swal-input5'), id: "swal-input5" });
+                for (let i = 0; i < arr.length; i++) {
+                    if (checkValidaty(arr[i].input_name)) {
+                        let err_message = arr[i].input_name.validationMessage;
+                        if (arr[i].id == "swal-input5") {
+                            $('textarea[id="' + arr[i].id + '"]').addClass('invalid').after('<div class="invalid-feedback">' + err_message + '</div>');
+                        }
+                        $('input[id="' + arr[i].id + '"]').addClass('invalid').after('<div class="invalid-feedback">' + err_message + '</div>');
+                        count = count + 1;
+                    }
+                }
+                if (count > 0) {
+                    console.log("value is > 0" + count)
+                    return false;
+                } else {
+                    console.log("value is 0 >" + count)
+                    return [arr[0].input_name.value, arr[1].input_name.value, arr[2].input_name.value, arr[3].input_name.value,arr[4].input_name.value];
+                }
+            }
+        })
+        if (formValues) {
+            axios.post('/profile/editprofile/' + user_id, { 
+                city : formValues[0] ,
+                state : formValues[1],
+                pincode : formValues[2],
+                country : formValues[3],
+                address : formValues[4]
+            }).then((response) => {
+                console.log(response.data);
+                alertMessage(response.data.message, 'success');
+            }).catch(error => {
+                console.log("error" + error.response);
+                alertMessage(error.response.data.message, 'warning')
+            });;
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+function alertMessage(title,icon) {
+    Swal.fire({
+        position: 'top-end',
+        icon: icon,
+        title: title,
+        showConfirmButton: false,
+        timer: 2000
+    })
+}
+
+function checkValidaty(input_name) {
+    if (!input_name.checkValidity()) {
+        return true;
+    }
+}
 </script>

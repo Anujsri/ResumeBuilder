@@ -17,24 +17,28 @@ function addAward(e) {
         date: date,
         institute_name: institute_name,
         description: description
-    }).then(function(response) {
+    }).then((response)=> {
         console.log(response.data);
-        
-        document.getElementById('award_name').value = '';
-        document.getElementById('award_date').value = '';
-        document.getElementById('award_institute_name').value = '';
-        document.getElementById('award_description').value = '';
-        Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Your password has been updated',
-            showConfirmButton: false,
-            timer: 2000
-        })
+        alertMessage(response.data.message,'success');
     }).catch(error => {
-        console.log(error.response.data);
-        modal.click(function() {
-            modal.modal('hide');
-        });
+        console.log(error.response);
+        alertMessage(error.response.data.message,'warning')
     });
+    document.getElementById('award_name').value = '';
+    document.getElementById('award_date').value = '';
+    document.getElementById('award_institute_name').value = '';
+    document.getElementById('award_description').value = '';
+    modal.click(function() {
+        modal.modal('hide');
+    });
+}
+
+function alertMessage(title,icon) {
+    Swal.fire({
+        position: 'top-end',
+        icon: icon,
+        title: title,
+        showConfirmButton: false,
+        timer: 3000
+    })
 }

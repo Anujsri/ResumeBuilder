@@ -47,8 +47,13 @@ function getAward(user_id) {
 
 router.post('/editprofile/:id', ensureAuthenticated, (req, res) => {
     user_id = req.params.id;
+    let message;
     User.findById(user_id, (err, user) => {
-        if (err) throw err;
+        if (err) {
+            console.log("err1"+err)
+            message = "Some erro occured";
+            res.status(404).send({ message: message, data: {} });
+        }
         else if (user) {
             city = req.body.city;
             state = req.body.state;
@@ -63,12 +68,18 @@ router.post('/editprofile/:id', ensureAuthenticated, (req, res) => {
             if (address) user.address.address = address;
             if (profile_overview) user.profile_overview = profile_overview;
             user.save((err, user) => {
-                if (err) throw err;
-                res.redirect('/users/profile');
+                if (err) {
+                    console.log("err2"+err)
+                    message = "Duplicate Entry found";
+                    res.status(422).send({ message: message, data: {} });
+                }
+                message = "Your profile is updated";
+                res.status(201).send({message : message,data : user});
             });
         } else {
-            let msg = "User not found with id";
-            res.json(msg);
+            console.log("err3"+err)
+            message = "User not found with id";
+            res.status(404).send({ message: message, data: {} });
         }
     })
 })
@@ -94,7 +105,7 @@ router.post('/experience/:id', ensureAuthenticated, (req, res) => {
                 location: location,
                 description: description,
                 projects: projects,
-                user_id : user_id
+                user_id: user_id
             });
             experienceadd.save((err, experience) => {
                 if (err) return err;
@@ -123,12 +134,12 @@ router.post('/education/:id', ensureAuthenticated, (req, res) => {
 
             var expeducation = new Education({
                 degree: degree,
-                institute_name : institute_name,
-                start_date : start_date,
-                end_date : end_date,
-                location : location,
-                description : description,
-                user_id : user_id
+                institute_name: institute_name,
+                start_date: start_date,
+                end_date: end_date,
+                location: location,
+                description: description,
+                user_id: user_id
             });
             expeducation.save((err, education) => {
                 if (err) return err;
@@ -156,13 +167,13 @@ router.post('/certificate/:id', ensureAuthenticated, (req, res) => {
             description = req.body.description;
 
             var certificate = new Certificate({
-                certificate_name : certificate_name,
-                institute_name : institute_name,
-                start_date : start_date,
-                end_date : end_date,
-                location : location,
-                description : description,
-                user_id : user_id
+                certificate_name: certificate_name,
+                institute_name: institute_name,
+                start_date: start_date,
+                end_date: end_date,
+                location: location,
+                description: description,
+                user_id: user_id
             });
             certificate.save((err, certificate) => {
                 if (err) return err;
@@ -179,6 +190,7 @@ router.post('/certificate/:id', ensureAuthenticated, (req, res) => {
 
 router.post('/award/:id', ensureAuthenticated, (req, res) => {
     user_id = req.params.id;
+    let message;
     User.findById(user_id, (err, user) => {
         if (err) throw err;
         else if (user) {
@@ -188,24 +200,23 @@ router.post('/award/:id', ensureAuthenticated, (req, res) => {
             description = req.body.description;
 
             var award = new Award({
-                award_name : award_name,
-                date : date,
-                institute_name : institute_name,
-                description : description,
-                user_id : user_id
+                award_name: award_name,
+                date: date,
+                institute_name: institute_name,
+                description: description,
+                user_id: user_id
             });
             award.save((err, award) => {
-                if (err){
-                    console.log("addAward error : "+err);
-                    let message = err;
-                    res.status(422).send({message : message,data : {}});
-                } 
-                req.flash('success_msg', 'You profile is saved!');
-                res.json(award);
+                if (err) {
+                    message = "Duplicate Entry found";
+                    res.status(422).send({ message: message, data: {} });
+                }
+                message = "Award is Added to your profile";
+                res.status(201).send({message : message,data : award});
             });
         } else {
-            let msg = "User not found with id";
-            res.json(msg);
+            message = "User not found with id";
+            res.status(404).send({ message: message, data: {} });
         }
 
     });
