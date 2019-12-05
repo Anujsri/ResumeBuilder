@@ -25,10 +25,10 @@ function addExperiences(e) {
         projects: projectarr,
     }).then(function(response) {
         console.log(response.data);
-        alertMessage(response.data.message,'success');
+        alertMessage(response.data.message, 'success');
     }).catch(error => {
         console.log(error.response);
-        alertMessage(error.response.data.message,'warning')
+        alertMessage(error.response.data.message, 'warning')
     });
     document.getElementById('job_title').value = '';
     document.getElementById('company_name').value = '';
@@ -41,7 +41,49 @@ function addExperiences(e) {
     });
 }
 
-function alertMessage(title,icon) {
+function getExperience() {
+    console.log("User_id : " + user_id)
+    axios.get('/profile/experience/' + user_id).then(function(response) {
+        var codeBlock = '';
+        console.log(response.data.data.job_title)
+        var job_title = response.data.data.job_title;
+        codeBlock = '<div class="row">'+
+                    '<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">'+
+                    '<i class="fa fa-circle" aria-hidden="true"></i> '+ job_title +
+                    '<div class="modal-body">'+
+                    '<p><i class="fa fa-building" aria-hidden="true"></i> '+
+                     response.data.data.company_name +' <i class="fa fa-building" aria-hidden="true"></i> '+
+                      response.data.data.location +' </p>'+
+                    '<small>' + response.data.data.description+'</small>'+
+                    '</div>'+
+                    '</div>'+
+                    '<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">'+
+                    '<div class="pull-right">'+
+                    '<i class="fa fa-calendar" aria-hidden="true"></i> '+
+                    'start_date - start_date' +'<a href="#" type="button" data-toggle="modal" data-target="#editOverview">'+
+                    '<i class="glyphicon glyphicon-pencil"></i></a>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div> '+
+                    '<br>'+
+                    '<div class="modal-body">'+
+                    '<h4>' +'Projects'+
+                    '<span class="pull-right">'+
+                    '<a href="#" type="button" onclick="addAddress()"><i class="glyphicon glyphicon-plus"></i> Add more projects</a>'+
+                    '</span>'+
+                    '</h4>'+
+                    '<br>'+
+                    '</div>'
+        
+        document.getElementById("experience_block").innerHTML = codeBlock;
+    }).catch(error => {
+        console.log(error);
+    });
+}
+
+getExperience()
+
+function alertMessage(title, icon) {
     Swal.fire({
         position: 'top-end',
         icon: icon,

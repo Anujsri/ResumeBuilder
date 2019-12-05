@@ -17,11 +17,9 @@ router.get('/getprofile', ensureAuthenticated, (req, res) => {
     })
 })
 
-function getExperience(user_id) {
-    Experience.findOne({ user_id: user_id }, (err, experience) => {
-        if (err) throw err;
-        return experience;
-    })
+function getExperience(user_id, callback) {
+    var query = { user_id: user_id };
+    Experience.findOne(query, callback);
 }
 
 function getEducation(user_id) {
@@ -50,11 +48,9 @@ router.post('/editprofile/:id', ensureAuthenticated, (req, res) => {
     let message;
     User.findById(user_id, (err, user) => {
         if (err) {
-            console.log("err1"+err)
             message = "Some erro occured";
             res.status(404).send({ message: message, data: {} });
-        }
-        else if (user) {
+        } else if (user) {
             city = req.body.city;
             state = req.body.state;
             pincode = req.body.pincode;
@@ -69,15 +65,13 @@ router.post('/editprofile/:id', ensureAuthenticated, (req, res) => {
             if (profile_overview) user.profile_overview = profile_overview;
             user.save((err, user) => {
                 if (err) {
-                    console.log("err2"+err)
                     message = "Duplicate Entry found";
                     res.status(422).send({ message: message, data: {} });
                 }
                 message = "Your profile is updated";
-                res.status(201).send({message : message,data : user});
+                res.status(201).send({ message: message, data: user });
             });
         } else {
-            console.log("err3"+err)
             message = "User not found with id";
             res.status(404).send({ message: message, data: {} });
         }
@@ -212,7 +206,7 @@ router.post('/award/:id', ensureAuthenticated, (req, res) => {
                     res.status(422).send({ message: message, data: {} });
                 }
                 message = "Award is Added to your profile";
-                res.status(201).send({message : message,data : award});
+                res.status(201).send({ message: message, data: award });
             });
         } else {
             message = "User not found with id";
@@ -224,8 +218,23 @@ router.post('/award/:id', ensureAuthenticated, (req, res) => {
 
 router.get('/experience/:id', ensureAuthenticated, (req, res) => {
     var user_id = req.params.id;
-    experience = getExperience(user_id);
-    res.json(experience);
+    User.findById(user_id, (err, user) => {
+        if (err) {
+            message = "Some erro occured";
+            res.status(404).send({ message: message, data: {} });
+        } else if (user) {
+            getExperience(user_id, (err, experience) => {
+                if (err) {
+                    message = "No experience found with user_id";
+                    res.status(400).send({ message: message, data: {} });
+                }
+                res.status(200).send({ message: "", data: experience })
+            });
+        } else {
+            message = "User not found with id";
+            res.status(404).send({ message: message, data: {} });
+        }
+    });
 })
 
 router.get('/award/:id', ensureAuthenticated, (req, res) => {
