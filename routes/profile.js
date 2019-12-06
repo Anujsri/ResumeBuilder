@@ -17,31 +17,6 @@ router.get('/getprofile', ensureAuthenticated, (req, res) => {
     })
 })
 
-function getExperience(user_id, callback) {
-    var query = { user_id: user_id };
-    Experience.findOne(query, callback);
-}
-
-function getEducation(user_id) {
-    Education.findOne({ user_id: user_id }, (err, education) => {
-        if (err) throw err;
-        return education;
-    })
-}
-
-function getCertificate(user_id) {
-    Certificate.findOne({ user_id: user_id }, (err, certificate) => {
-        if (err) throw err;
-        return certificate;
-    })
-}
-
-function getAward(user_id) {
-    Award.findOne({ user_id: user_id }, (err, award) => {
-        if (err) throw err;
-        return award;
-    })
-}
 
 router.post('/editprofile/:id', ensureAuthenticated, (req, res) => {
     user_id = req.params.id;
@@ -223,7 +198,7 @@ router.get('/experience/:id', ensureAuthenticated, (req, res) => {
             message = "Some erro occured";
             res.status(404).send({ message: message, data: {} });
         } else if (user) {
-            getExperience(user_id, (err, experience) => {
+            Experience.find({ user_id: user_id }, (err, experience) => {
                 if (err) {
                     message = "No experience found with user_id";
                     res.status(400).send({ message: message, data: {} });
@@ -237,23 +212,70 @@ router.get('/experience/:id', ensureAuthenticated, (req, res) => {
     });
 })
 
-router.get('/award/:id', ensureAuthenticated, (req, res) => {
+
+router.get('/education/:id', ensureAuthenticated, (req, res) => {
     var user_id = req.params.id;
-    award = getAward(user_id);
-    res.json(award)
+    User.findById(user_id, (err, user) => {
+        if (err) {
+            message = "Some erro occured";
+            res.status(404).send({ message: message, data: {} });
+        } else if (user) {
+            Education.find({ user_id: user_id }, (err, education) => {
+                if (err) {
+                    message = "No education found with user_id";
+                    res.status(400).send({ message: message, data: {} });
+                }
+                res.status(200).send({ message: "", data: education })
+            });
+        } else {
+            message = "User not found with id";
+            res.status(404).send({ message: message, data: {} });
+        }
+    });
 })
 
 router.get('/certificate/:id', ensureAuthenticated, (req, res) => {
     var user_id = req.params.id;
-    certificate = getCertificate(user_id);
-    res.json(certificate)
+    User.findById(user_id, (err, user) => {
+        if (err) {
+            message = "Some erro occured";
+            res.status(404).send({ message: message, data: {} });
+        } else if (user) {
+            Certificate.find({ user_id: user_id }, (err, certificate) => {
+                if (err) {
+                    message = "No certificate found with user_id";
+                    res.status(400).send({ message: message, data: {} });
+                }
+                res.status(200).send({ message: "", data: certificate })
+            });
+        } else {
+            message = "User not found with id";
+            res.status(404).send({ message: message, data: {} });
+        }
+    });
 })
 
-router.get('/education/:id', ensureAuthenticated, (req, res) => {
+router.get('/award/:id', ensureAuthenticated, (req, res) => {
     var user_id = req.params.id;
-    education = getEducation(user_id)
-    res.json(education);
+    User.findById(user_id, (err, user) => {
+        if (err) {
+            message = "Some erro occured";
+            res.status(404).send({ message: message, data: {} });
+        } else if (user) {
+            Award.find({ user_id: user_id }, (err, award) => {
+                if (err) {
+                    message = "No award found with user_id";
+                    res.status(400).send({ message: message, data: {} });
+                }
+                res.status(200).send({ message: "", data: award })
+            });
+        } else {
+            message = "User not found with id";
+            res.status(404).send({ message: message, data: {} });
+        }
+    });
 })
+
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {

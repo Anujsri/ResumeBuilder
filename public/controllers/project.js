@@ -21,11 +21,14 @@ function addProjects(e) {
     projectarr.push(obj)
     var codeBlock = '';
     for (var i = 0; i < projectarr.length; i++) {
-        codeBlock += '<div class="col-md-3 col-sm-4 col-xs-6">' +
-            '<h4>' + projectarr[i].project_name + '</h4>' +
+        codeBlock += '<div class="col-md-3 col-sm-3 col-xs-6"><div class="thumbnail cardshadow" style="padding : 20px">' +
+            '<h5>' + projectarr[i].project_name + '</h5>' +
             '<p>' + projectarr[i].skills + ' | ' + projectarr[i].app_link + '</p>' +
             '<p>' + projectarr[i].description + '</p>' +
-            '</div>'
+            '<div class="caption">'+
+            '<p><a href="#" class="btn btn-primary" role="button"><i class="glyphicon glyphicon-pencil"></i> Edit</a> '+
+            ' <a href="#" class="btn btn-danger" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a></p>'+
+            '</div></div></div>'
     }
     document.getElementById("addedprojects").innerHTML = codeBlock;
     document.getElementById('project_name').value = '';

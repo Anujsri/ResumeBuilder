@@ -35,7 +35,7 @@ async function addAddress() {
             showCancelButton: true,
             cancelButtonColor: '#d33',
             html: '<div class="modal-body">' +
-                '<form method="post" action="/profile/editprofile">' +
+                '<form method="post">' +
                 '<div class="row">' +
                 '<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">' +
                 '<div class="form-group">' +
