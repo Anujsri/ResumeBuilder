@@ -23,7 +23,10 @@ mongoose.connection.on('error', (err) => {
 
 var profile = require('./routes/profile');
 var users = require('./routes/users');
- 
+var award = require('./routes/award');
+var certificate = require('./routes/certificate');
+var education = require('./routes/education');
+var experience = require('./routes/experience');
 
 
 // View Engine
@@ -84,6 +87,10 @@ app.use( (req, res, next)=> {
 
 app.use('/profile', profile);
 app.use('/users', users);
+app.use('/award',award);
+app.use('/certificate',certificate);
+app.use('/education',education);
+app.use('/experience',experience)
  
 // Set Port
 http.listen(process.env.PORT || 3000,function(){
