@@ -5,18 +5,105 @@ var Experience = require('../models/experience');
 var Education = require('../models/education');
 var Certificate = require('../models/certificate');
 var Award = require('../models/award');
-// Get Homepage
+var multer = require('multer');
+
+
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './public/uploads/');
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+
+var upload = multer({
+    storage: storage,
+    limits: { fileSize: 2000000 },
+    fileFilter: function(req, file, cb) {
+        checkFileType(file, cb)
+    }
+}).any();
+// Add Product
+function checkFileType(file, cb) {
+    const filetypes = /jpeg|jpg|png|svg/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+    if (mimetype && extname) {
+        return cb(null, true);
+    } else {
+        cb('Error : Image Only');
+    }
+}
+
 router.get('/getprofile', ensureAuthenticated, (req, res) => {
-    User.findOne({ email: req.user.email }, (err, user) => {
+    User.findOne({ email: req.user.email })
+        .then((user) => {
+            var result = {};
+            result['user'] = user;
+            return result;
+        })
+        .then((result) => {
+            return Certificate.find({ user_id: req.user.id }).exec()
+                .then((certificate) => {
+                    result['certificate'] = certificate;
+                    return result;
+                });
+        })
+        .then((result) => {
+            return Award.find({ user_id: req.user.id }).exec()
+                .then((award) => {
+                    result['award'] = award;
+                    return result;
+                });
+        })
+        .then((result) => {
+            return Education.find({ user_id: req.user.id }).exec()
+                .then((education) => {
+                    result['education'] = education;
+                    return result;
+                });
+        })
+        .then((result) => {
+            return Experience.find({ user_id: req.user.id }).exec()
+                .then((experience) => {
+                    result['experience'] = experience;
+                    return result;
+                });
+        })
+        .then(function(result) {
+            res.render('profile', result);
+        })
+        .catch((e) => {
+            console.log(e)
+        })
+});
+
+router.post('/addimage/:id', ensureAuthenticated, upload, (req, res) => {
+    user_id = req.params.id;
+    let message;
+    User.findById(user_id, (err, user) => {
         if (err) {
-            req.flash('error_msg', 'Some error occured');
-            res.render('profile')
+            message = "Some erro occured";
+            res.status(404).send({ message: message, data: {} });
+        } else if (user) {
+            var profile_image = req.files[0].filename;
+            user.profile_image = profile_image;
+            user.save((err, user) => {
+                if (err) {
+                    message = "Only Image are allowed";
+                    res.status(400).send({ message: message, data: {} });
+                }
+                message = "Your profile is updated";
+                res.status(201).send({ message: message, data: user });
+            });
         } else {
-            res.render('profile', { user });
+            message = "User not found with id";
+            res.status(404).send({ message: message, data: {} });
         }
     })
 })
-
 
 router.post('/editprofile/:id', ensureAuthenticated, (req, res) => {
     user_id = req.params.id;
@@ -52,230 +139,6 @@ router.post('/editprofile/:id', ensureAuthenticated, (req, res) => {
         }
     })
 })
-
-router.post('/experience/:id', ensureAuthenticated, (req, res) => {
-    user_id = req.params.id;
-    User.findById(user_id, (err, user) => {
-        if (err) throw err;
-        else if (user) {
-            job_title = req.body.job_title;
-            company_name = req.body.company_name;
-            start_date = req.body.start_date;
-            end_date = req.body.end_date;
-            location = req.body.location;
-            description = req.body.description;
-            projects = req.body.projects;
-
-            var experienceadd = new Experience({
-                job_title: job_title,
-                company_name: company_name,
-                start_date: start_date,
-                end_date: end_date,
-                location: location,
-                description: description,
-                projects: projects,
-                user_id: user_id
-            });
-            experienceadd.save((err, experience) => {
-                if (err) return err;
-                req.flash('success_msg', 'You profile is saved!');
-                res.json(experience);
-            });
-        } else {
-            let msg = "User not found with id";
-            res.json(msg);
-        }
-
-    });
-})
-
-router.post('/education/:id', ensureAuthenticated, (req, res) => {
-    user_id = req.params.id;
-    User.findById(user_id, (err, user) => {
-        if (err) throw err;
-        else if (user) {
-            degree = req.body.degree;
-            institute_name = req.body.institute_name;
-            start_date = req.body.start_date;
-            end_date = req.body.end_date;
-            location = req.body.location;
-            description = req.body.description;
-
-            var expeducation = new Education({
-                degree: degree,
-                institute_name: institute_name,
-                start_date: start_date,
-                end_date: end_date,
-                location: location,
-                description: description,
-                user_id: user_id
-            });
-            expeducation.save((err, education) => {
-                if (err) return err;
-                req.flash('success_msg', 'You profile is saved!');
-                res.json(education);
-            });
-        } else {
-            let msg = "User not found with id";
-            res.json(msg);
-        }
-
-    });
-})
-
-router.post('/certificate/:id', ensureAuthenticated, (req, res) => {
-    user_id = req.params.id;
-    User.findById(user_id, (err, user) => {
-        if (err) throw err;
-        else if (user) {
-            certificate_name = req.body.certificate_name;
-            institute_name = req.body.institute_name;
-            start_date = req.body.start_date;
-            end_date = req.body.end_date;
-            location = req.body.location;
-            description = req.body.description;
-
-            var certificate = new Certificate({
-                certificate_name: certificate_name,
-                institute_name: institute_name,
-                start_date: start_date,
-                end_date: end_date,
-                location: location,
-                description: description,
-                user_id: user_id
-            });
-            certificate.save((err, certificate) => {
-                if (err) return err;
-                req.flash('success_msg', 'You profile is saved!');
-                res.json(certificate);
-            });
-        } else {
-            let msg = "User not found with id";
-            res.json(msg);
-        }
-
-    });
-})
-
-router.post('/award/:id', ensureAuthenticated, (req, res) => {
-    user_id = req.params.id;
-    let message;
-    User.findById(user_id, (err, user) => {
-        if (err) throw err;
-        else if (user) {
-            award_name = req.body.award_name;
-            date = req.body.date;
-            institute_name = req.body.institute_name;
-            description = req.body.description;
-
-            var award = new Award({
-                award_name: award_name,
-                date: date,
-                institute_name: institute_name,
-                description: description,
-                user_id: user_id
-            });
-            award.save((err, award) => {
-                if (err) {
-                    message = "Duplicate Entry found";
-                    res.status(422).send({ message: message, data: {} });
-                }
-                message = "Award is Added to your profile";
-                res.status(201).send({ message: message, data: award });
-            });
-        } else {
-            message = "User not found with id";
-            res.status(404).send({ message: message, data: {} });
-        }
-
-    });
-})
-
-router.get('/experience/:id', ensureAuthenticated, (req, res) => {
-    var user_id = req.params.id;
-    User.findById(user_id, (err, user) => {
-        if (err) {
-            message = "Some erro occured";
-            res.status(404).send({ message: message, data: {} });
-        } else if (user) {
-            Experience.find({ user_id: user_id }, (err, experience) => {
-                if (err) {
-                    message = "No experience found with user_id";
-                    res.status(400).send({ message: message, data: {} });
-                }
-                res.status(200).send({ message: "", data: experience })
-            });
-        } else {
-            message = "User not found with id";
-            res.status(404).send({ message: message, data: {} });
-        }
-    });
-})
-
-
-router.get('/education/:id', ensureAuthenticated, (req, res) => {
-    var user_id = req.params.id;
-    User.findById(user_id, (err, user) => {
-        if (err) {
-            message = "Some erro occured";
-            res.status(404).send({ message: message, data: {} });
-        } else if (user) {
-            Education.find({ user_id: user_id }, (err, education) => {
-                if (err) {
-                    message = "No education found with user_id";
-                    res.status(400).send({ message: message, data: {} });
-                }
-                res.status(200).send({ message: "", data: education })
-            });
-        } else {
-            message = "User not found with id";
-            res.status(404).send({ message: message, data: {} });
-        }
-    });
-})
-
-router.get('/certificate/:id', ensureAuthenticated, (req, res) => {
-    var user_id = req.params.id;
-    User.findById(user_id, (err, user) => {
-        if (err) {
-            message = "Some erro occured";
-            res.status(404).send({ message: message, data: {} });
-        } else if (user) {
-            Certificate.find({ user_id: user_id }, (err, certificate) => {
-                if (err) {
-                    message = "No certificate found with user_id";
-                    res.status(400).send({ message: message, data: {} });
-                }
-                res.status(200).send({ message: "", data: certificate })
-            });
-        } else {
-            message = "User not found with id";
-            res.status(404).send({ message: message, data: {} });
-        }
-    });
-})
-
-router.get('/award/:id', ensureAuthenticated, (req, res) => {
-    var user_id = req.params.id;
-    User.findById(user_id, (err, user) => {
-        if (err) {
-            message = "Some erro occured";
-            res.status(404).send({ message: message, data: {} });
-        } else if (user) {
-            Award.find({ user_id: user_id }, (err, award) => {
-                if (err) {
-                    message = "No award found with user_id";
-                    res.status(400).send({ message: message, data: {} });
-                }
-                res.status(200).send({ message: "", data: award })
-            });
-        } else {
-            message = "User not found with id";
-            res.status(404).send({ message: message, data: {} });
-        }
-    });
-})
-
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {

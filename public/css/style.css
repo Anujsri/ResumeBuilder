@@ -15,26 +15,50 @@ p {
     color: #555;
 
 }
-.input_height{
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.btnf {
+    font-size: 20px;
+    border: none;
+    font-weight: bold;
+    color: #03b6fc;
+}
+
+.upload-btn-wrapper input[type=file] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.input_height {
     height: 50px;
 }
+
 .modal-lg {
     width: 100%;
 }
+
 .modal-dialog,
 .modal-content {
     /* 80% of window height */
     height: 100%;
+    overflow: scroll;
 }
 
 .cardshadow {
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
 }
 
 .cardshadow:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
+
 .hidden {
     display: none;
 }

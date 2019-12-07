@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var DateOnly = require('mongoose-dateonly')(mongoose);
 // Award Schema
 var AwardSchema = mongoose.Schema({
     award_name: {
@@ -14,8 +15,8 @@ var AwardSchema = mongoose.Schema({
     description: {
         type: String
     },
-    user_id : {
-    	type : String
+    user_id: {
+        type: String
     }
 });
 

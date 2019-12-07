@@ -24,6 +24,10 @@ var UserSchema = mongoose.Schema({
 		type: Number,
 		required: true
 	},
+	profile_image:{
+        type: String,
+        default: "https://image.flaticon.com/icons/svg/306/306473.svg" 
+    },
 	address : {
 		city: {
 			type: String

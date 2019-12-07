@@ -1,6 +1,26 @@
+// var changeimage = document.getElementById('change-image');
+// changeimage.addEventListener('submit', changeImage);
+user_id = document.getElementById('user_id').value;
+
+// function changeImage(e) {
+//     // Prevent actual submit
+//     e.preventDefault();
+//     profile_overview = document.getElementById('profile_overview').value;
+
+//     axios.post('/profile/editprofile/' + user_id, {
+//         profile_overview: profile_overview
+//     }).then((response) => {
+//         console.log(response.data);
+//         alertMessage(response.data.message, 'success')
+//         $("#basic_details").load(window.location.href + " #basic_details");
+//     }).catch(error => {
+//         console.log(error.response);
+//         alertMessage(error.response.data.message, 'warning')
+//     });
+// }
+
 var editoverview = document.getElementById('edit-overview');
 editoverview.addEventListener('submit', editOverview);
-user_id = document.getElementById('user_id').value;
 
 function editOverview(e) {
     // Prevent actual submit
