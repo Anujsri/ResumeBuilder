@@ -38,15 +38,17 @@
                             {{#if notSharable}}<a href="#" type="button" data-toggle="modal" data-target="#addHighlight"><i class="glyphicon glyphicon-pencil"></i></a>{{/if}}
                         </span>
                     </h5>
+                    <div class="modal-body">
                     <div class="row">
                         {{#if highlight}}
                         {{#each highlight.highlightName}}
-                        <!-- <div class="col-sm-4 col-xs-12"> -->
-                            <span id="{{this}}">{{this}}</span>
-                        <!-- </div> -->
+                        
+                            <span id="{{this}}" style="background-color: #D2D6E0 ;padding: 7px;border-radius: 5px;line-height: 350%;">{{this}}</span>
+                        
                         {{/each}}
                         {{/if}}
                     </div>
+                </div>
                 </div>
             </div>
         </div>
