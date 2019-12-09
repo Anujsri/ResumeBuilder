@@ -1,5 +1,5 @@
 {
-  "name": "NodeJs Resume Builder",
+  "name": "resumebuilder",
   "version": "1.0.0",
   "description": "Simple Resume Builder",
   "main": "app.js",
