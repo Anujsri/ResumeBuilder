@@ -41,7 +41,9 @@
                     <div class="row">
                         {{#if highlight}}
                         {{#each highlight.highlightName}}
-                        <p id="{{this}}" style="word-spacing: 10px;">{{this}}</p>
+                        <!-- <div class="col-sm-4 col-xs-12"> -->
+                            <span id="{{this}}">{{this}}</span>
+                        <!-- </div> -->
                         {{/each}}
                         {{/if}}
                     </div>
