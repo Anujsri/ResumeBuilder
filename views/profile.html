@@ -1,6 +1,6 @@
 <input type='hidden' id="user_id" value="{{user._id}}">
 <input type="hidden" id="highlightValues" value="{{highlight.highlightName}}">
-<div class="row" style="padding: 50px" id="certification_block">
+<div class="row" style="padding: 50px">
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
         <div class="row cardshadow">
             <div class="modal-body">
@@ -57,24 +57,26 @@
             <div class="row " style="padding-left: 5%">
                 <!-- profile_overview -->
                 <div class="row">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h5><i class="glyphicon glyphicon-user"></i> Profile Overview
-                                <span class="pull-right">
-                                    {{#if user.profile_overview}}
-                                    {{#if notSharable}}<a href="#" type="button" data-toggle="modal" data-target="#editOverview"><i class="glyphicon glyphicon-pencil"></i></a>{{/if}}
-                                    {{else}}
-                                    <a href="#" type="button" data-toggle="modal" data-target="#editOverview"><i class="glyphicon glyphicon-plus"></i>Add Overview</a>
-                                    {{/if}}
-                                </span>
-                            </h5>
-                        </div>
-                        <div class="panel-body">
-                            {{#if user.profile_overview}}
-                            <div id="profile_overview_information">
-                                <p>{{user.profile_overview}}</p>
+                    <div id="profile_overview_block">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h5><i class="glyphicon glyphicon-user"></i> Profile Overview
+                                    <span class="pull-right">
+                                        {{#if user.profile_overview}}
+                                        {{#if notSharable}}<a href="#" type="button" data-toggle="modal" data-target="#editOverview"><i class="glyphicon glyphicon-pencil"></i></a>{{/if}}
+                                        {{else}}
+                                        <a href="#" type="button" data-toggle="modal" data-target="#editOverview"><i class="glyphicon glyphicon-plus"></i>Add Overview</a>
+                                        {{/if}}
+                                    </span>
+                                </h5>
                             </div>
-                            {{/if}}
+                            <div class="panel-body">
+                                {{#if user.profile_overview}}
+
+                                    <p>{{user.profile_overview}}</p>
+                               
+                                {{/if}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -307,7 +309,6 @@
         </div>
     </div>
 </div>
-
 <!-- Modal for editOverview -->
 <div class="modal fade" id="editOverview" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -333,7 +334,6 @@
     </div>
 </div>
 <!--end  Modal for editOverview -->
-
 <!-- Modal for Add experience-->
 <div class="modal fade" id="addExperience" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -412,7 +412,6 @@
     </div>
 </div>
 <!--end Modal for experience -->
-
 <!-- Modal for edit experience-->
 <div class="modal fade" id="editExperience" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -491,7 +490,6 @@
     </div>
 </div>
 <!--end Modal for edit experience-->
-
 <!-- Modal for add projects-->
 <div class="modal fade" id="addProject" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -566,7 +564,6 @@
     </div>
 </div>
 <!--end Modal for add projectse-->
-
 <!-- Modal for edit projects-->
 <div class="modal fade" id="EditProject" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -641,7 +638,6 @@
     </div>
 </div>
 <!--end Modal for edit projects-->
-
 <!-- Modal for Add education-->
 <div class="modal fade" id="addEducation" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -716,7 +712,6 @@
     </div>
 </div>
 <!--end Modal for Add education-->
-
 <!-- Modal for edit education-->
 <div class="modal fade" id="editEducation" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -791,7 +786,6 @@
     </div>
 </div>
 <!--end Modal for edit education-->
-
 <!-- Modal for ddCertificate-->
 <div class="modal fade" id="addCertificate" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -865,7 +859,6 @@
     </div>
 </div>
 <!--end Modal for ddCertificate-->
-
 <!-- Modal editCertificate-->
 <div class="modal fade" id="editCertificate" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -939,7 +932,6 @@
     </div>
 </div>
 <!--end Modal editCertificate-->
-
 <!-- Modal for  addAward-->
 <div class="modal fade" id="addAward" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -992,7 +984,6 @@
     </div>
 </div>
 <!--end Modal for  addAward-->
-
 <!-- Modal for editAward-->
 <div class="modal fade" id="editAward" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -1045,7 +1036,6 @@
     </div>
 </div>
 <!--end Modal for editAward-->
-
 <!-- Modal for addHighlight-->
 <div class="modal fade" id="addHighlight" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -1085,8 +1075,6 @@
     </div>
 </div>
 <!--end Modal for addHighlight-->
-
-
 <script src="../controllers/project.js"></script>
 <script src="../controllers/experience.js"></script>
 <script src="../controllers/education.js"></script>

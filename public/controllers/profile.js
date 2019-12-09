@@ -14,7 +14,7 @@ function editOverview(e) {
         profile_overview: profile_overview
     }).then((response) => {
         alertMessage(response.data.message, 'success')
-        $("#profile_overview_information").load(window.location.href + " #profile_overview_information");
+        $("#profile_overview_block").load(window.location.href + " #profile_overview_block");
     }).catch(error => {
         if (typeof error.response !== "undefined") {
             alertMessage(error.response.data.message, 'warning')
