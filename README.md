@@ -118,6 +118,6 @@ $ npm start
 ```
 
 ## Open Website(Heroku Link)
-https://gittask.herokuapp.com
+https://mycvbuilder.herokuapp.com/users/login
 
 ## Thank You!
