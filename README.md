@@ -41,7 +41,7 @@
   
   2. He can share his resume with sharable link,no login required to see someone's resume through sharable link.
      
-  3. One can download his resume in PDF format ##(I am working on it 70% done).
+  3. One can download his resume in PDF format.
      
   #
                                                            
