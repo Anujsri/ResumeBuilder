@@ -72,9 +72,7 @@
                             </div>
                             <div class="panel-body">
                                 {{#if user.profile_overview}}
-
-                                    <p>{{user.profile_overview}}</p>
-                               
+                                <p>{{user.profile_overview}}</p>
                                 {{/if}}
                             </div>
                         </div>
@@ -135,7 +133,7 @@
                                             <i class="fa fa-circle" aria-hidden="true"></i> {{this.project_name}}
                                             <div class="modal-body">
                                                 <p style="word-spacing: 5px;"> {{this.skills}} </p>
-                                                <small style="word-spacing: 5px;"> {{this.description}} </small>
+                                                <small> {{this.description}} </small>
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -167,7 +165,7 @@
                 <!--end show experience -->
                 <!-- show education -->
                 <div class="row">
-                    <div class="education_block">
+                    <div id="education_block">
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <h5><i class="fa fa-book" aria-hidden="true" style="color:#7f03fc"></i> Education
