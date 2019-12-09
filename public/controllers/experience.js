@@ -4,6 +4,7 @@ user_id = document.getElementById('user_id').value;
 //function to add experience
 var addexperience = document.getElementById('add-experience');
 addexperience.addEventListener('submit', addExperiences);
+
 function addExperiences(e) {
     // Prevent actual submit
     e.preventDefault();
@@ -20,15 +21,18 @@ function addExperiences(e) {
         alertMessage("<span style='color : #F26863'>Date is Invalid</span>", 'warning');
         return false;
     } else {
-        axios.post('/experience/experience/' + user_id, {
+        let experience_object = {
             job_title: job_title,
             company_name: company_name,
             start_date: start_date,
             end_date: end_date,
             location: experience_location,
             description: description,
-            projects: projectarr,
-        }).then(function(response) {
+        }
+        if (projectarr.length > 0) {
+            experience_object['projects'] = projectarr;
+        }
+        axios.post('/experience/experience/' + user_id, experience_object).then(function(response) {
             $("#experience_block").load(window.location.href + " #experience_block");
             alertMessage(response.data.message, 'success');
         }).catch(error => {
@@ -44,7 +48,7 @@ function addExperiences(e) {
     document.getElementById('experience_start_date').value = '';
     document.getElementById('experience_end_date').value = '';
     document.getElementById('experience_location').value = '';
-    document.getElementById('project_description').value = '';
+    document.getElementById('experience_description').value = '';
     modal.click(function() {
         modal.modal('hide');
     });
@@ -54,7 +58,7 @@ var experienceId;
 
 
 //function to fill the existing valus of fields when edit experience window pop up
-function fillEditExperience(company_name, location, job_title, description, experience_id, start_date, end_date,experience_location) {
+function fillEditExperience(company_name, location, job_title, description, experience_id, start_date, end_date, experience_location) {
     let edit_job_title = document.getElementById('ejob_title');
     let edit_company_name = document.getElementById('ecompany_name');
     let edit_start_date = document.getElementById('eexperience_start_date');
@@ -84,6 +88,7 @@ function fillEditExperience(company_name, location, job_title, description, expe
 //function to Edit the experience
 var editexperience = document.getElementById('edit-experience');
 editexperience.addEventListener('submit', editExperience);
+
 function editExperience(e) {
     // Prevent actual submit
     e.preventDefault();

@@ -1,6 +1,4 @@
 <input type='hidden' id="user_id" value="{{user._id}}">
-
-
 <input type="hidden" id="highlightValues" value="{{highlight.highlightName}}">
 <div class="row" style="padding: 50px">
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -43,9 +41,7 @@
                     <div class="row">
                         {{#if highlight}}
                         {{#each highlight.highlightName}}
-                        <div class="col-sm-4 col-xs-12">
-                            <p id="{{this}}">{{this}}</p>
-                        </div>
+                        <p id="{{this}}" style="word-spacing: 10px;">{{this}}</p>
                         {{/each}}
                         {{/if}}
                     </div>
@@ -496,7 +492,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" onclick="removeProject()">&times;</button>
                 <h4 class="modal-title">Add Project</h4>
             </div>
             <div class="modal-body">
@@ -556,7 +552,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-success" type="submit"><i class="fa fa-paper-plane"></i> Submit</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="removeProject()">Close</button>
                     </div>
                 </form>
             </div>
@@ -570,7 +566,7 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" onclick="removeProject()">&times;</button>
                 <h4 class="modal-title">Edit Project</h4>
             </div>
             <div class="modal-body">
@@ -630,7 +626,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-success" type="submit"><i class="fa fa-paper-plane"></i> Submit</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="removeProject()">Close</button>
                     </div>
                 </form>
             </div>
