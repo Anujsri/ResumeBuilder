@@ -1,44 +1,24 @@
-// var changeimage = document.getElementById('change-image');
-// changeimage.addEventListener('submit', changeImage);
 user_id = document.getElementById('user_id').value;
 
-// function changeImage(e) {
-//     // Prevent actual submit
-//     e.preventDefault();
-//     profile_overview = document.getElementById('profile_overview').value;
-
-//     axios.post('/profile/editprofile/' + user_id, {
-//         profile_overview: profile_overview
-//     }).then((response) => {
-//         console.log(response.data);
-//         alertMessage(response.data.message, 'success')
-//         $("#basic_details").load(window.location.href + " #basic_details");
-//     }).catch(error => {
-//         console.log(error.response);
-//         alertMessage(error.response.data.message, 'warning')
-//     });
-// }
-
+//function to edit overview
 var editoverview = document.getElementById('edit-overview');
 editoverview.addEventListener('submit', editOverview);
-
 function editOverview(e) {
     // Prevent actual submit
     e.preventDefault();
-    var modal = document.getElementById('editOverview');
+    let modal = document.getElementById('editOverview');
 
-
-    profile_overview = document.getElementById('profile_overview').value;
+    let profile_overview = document.getElementById('profile_overview').value;
 
     axios.post('/profile/editprofile/' + user_id, {
         profile_overview: profile_overview
     }).then((response) => {
-        console.log(response.data);
         alertMessage(response.data.message, 'success')
         $("#profile_overview_information").load(window.location.href + " #profile_overview_information");
     }).catch(error => {
-        console.log(error.response);
-        alertMessage(error.response.data.message, 'warning')
+        if (typeof error.response !== "undefined") {
+            alertMessage(error.response.data.message, 'warning')
+        }
     });
 
     document.getElementById('profile_overview').value = '';
@@ -47,6 +27,7 @@ function editOverview(e) {
     });
 }
 
+//function to edit Address
 async function addAddress() {
     try {
         const { value: formValues } = await Swal.fire({
@@ -112,10 +93,8 @@ async function addAddress() {
                     }
                 }
                 if (count > 0) {
-                    console.log("value is > 0" + count)
                     return false;
                 } else {
-                    console.log("value is 0 >" + count)
                     return [arr[0].input_name.value, arr[1].input_name.value, arr[2].input_name.value, arr[3].input_name.value, arr[4].input_name.value];
                 }
             }
@@ -132,8 +111,9 @@ async function addAddress() {
                 alertMessage(response.data.message, 'success');
                 $("#basic_details").load(window.location.href + " #basic_details");
             }).catch(error => {
-                console.log("error" + error.response);
-                alertMessage(error.response.data.message, 'warning')
+                if (typeof error.response !== "undefined") {
+                    alertMessage(error.response.data.message, 'warning')
+                }
             });;
         }
     } catch (e) {
@@ -147,12 +127,88 @@ function checkValidaty(input_name) {
     }
 }
 
+var highlightsArray = []
+var highlightNames = [];
+highlightValues = document.getElementById('highlightValues').value;
+var array = highlightValues.split(",");
+highlightNames = highlightNames.concat(array);
+
+
+var input1 = document.getElementById("highlightName");
+input1.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        var ul = document.getElementById("allHighlights");
+        if (input1.value !== '') {
+            var button = document.createElement("button");
+            var icon = document.createElement("i");
+            var span = document.createElement("span");
+            span.setAttribute('style', 'padding : 20px');
+            icon.setAttribute('class', 'fa fa-times')
+            icon.setAttribute('style', 'margin-left : 8px');
+            button.setAttribute('id', input1.value);
+            button.setAttribute('class', "btn btn-info");
+            button.setAttribute('style', 'border-radius: 10px')
+            button.setAttribute('onclick', 'removeItems(this)')
+            button.appendChild(document.createTextNode(input1.value));
+            button.appendChild(icon);
+            span.appendChild(button);
+            ul.appendChild(span);
+            highlightsArray.push(input1.value);
+            input1.value = '';
+        }
+    }
+});
+
+
+//function to add highlight
+document.getElementById("highlights").addEventListener("click", function(event) {
+    event.preventDefault();
+    let modal = document.getElementById('addHighlight');
+
+    highlightNames = highlightNames.concat(highlightsArray);
+
+    axios.post('/profile/highlights/' + user_id, { highlightName: highlightNames })
+        .then((response) => {
+            alertMessage(response.data.message, 'success')
+            $("#showhighlight").load(window.location.href + " #showhighlight");
+        }).catch(error => {
+            console.log(error.response);
+            if (typeof error.response !== "undefined") {
+                alertMessage(error.response.data.message, 'warning')
+            }
+        });
+
+    highlightsArray = [];
+    modal.click(function() {
+        modal.modal('hide');
+    });
+});
+
+//function to remove highlight from UI
+function removeItems(highlight) {
+    var item = highlight.id
+    var index = highlightNames.indexOf(item);
+    if (index !== -1) highlightNames.splice(index, 1);
+    highlight.remove()
+    $('#' + highlight.id).remove()
+}
+
+function removeHeighlights() {
+    highlightsArray = [];
+    $("#allHighlights").load(window.location.href + " #allHighlights");
+    $("#showhighlight").load(window.location.href + " #showhighlight");
+}
+
+
+//function to create sweatalert
 function alertMessage(title, icon) {
     const Toast = Swal.mixin({
         toast: true,
-        position: 'bottom-start',
+        position: 'top-end',
         showConfirmButton: false,
         timer: 3000,
+        width : 300,
         timerProgressBar: true,
         onOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer)

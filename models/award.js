@@ -3,8 +3,7 @@ var DateOnly = require('mongoose-dateonly')(mongoose);
 // Award Schema
 var AwardSchema = mongoose.Schema({
     award_name: {
-        type: String,
-        unique: true
+        type: String
     },
     date: {
         type: Date

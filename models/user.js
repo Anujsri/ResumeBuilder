@@ -17,8 +17,7 @@ var UserSchema = mongoose.Schema({
 	}, 
 	email: {
 		type: String,
-		required: true,	
-		index:true 
+		required: true
 	},
 	phone: {
 		type: Number,

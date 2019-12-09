@@ -12,8 +12,7 @@ var EducationSchema = mongoose.Schema({
         type: Date
     },
     degree: {
-        type: String,
-        unique: true
+        type: String
     },
     location: {
         type: String

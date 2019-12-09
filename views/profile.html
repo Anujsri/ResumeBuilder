@@ -1,33 +1,26 @@
-<script type="text/javascript">
-var monthNam = ["Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-
-function monthAndYear(date) {
-    let month = monthNam[date.getMonth()];
-    let year = date.getFullYear();
-    return [month, year];
-}
-</script>
 <input type='hidden' id="user_id" value="{{user._id}}">
+<input type="hidden" id="highlightValues" value="{{highlight.highlightName}}">
 <div class="row" style="padding: 50px" id="certification_block">
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
         <div class="row cardshadow">
             <div class="modal-body">
                 <div id="basic_details">
                     <b class="pull-right">
-                        <form role="form" method="post" enctype="multipart/form-data" id="change-image" action="/profile/addimage/{{user._id}}">
-                            <div class="upload-btn-wrapper">
-                                <button class="btnf" type="submit"><i class="glyphicon glyphicon-pencil"></i></button>
-                                <input type="file" id="profile_image" />
-                            </div>
+                        {{#if notSharable}}
+                        <form role="form" method="post" enctype="multipart/form-data" action="/profile/addimage/{{user._id}}">
+                            <input type="file" id="file1" name="image" accept="image/*" capture style="display:none" />
+                            <i class="glyphicon glyphicon-pencil" style="cursor:pointer" id="upfile1"></i>
                         </form>
+                        {{/if}}
                     </b>
-                    <center> <img src="{{user.profile_image}}" class="img-responsive img-circle" height="200px" width="200px"></center>
+                    <center> <img src="/uploads/{{user.profile_image}}" id="showimage" class="img-responsive img-circle" height="200px" width="200px"></center>
                     <br>
                     <center>{{user.name}}</center>
-                    <p><i class="fa fa-envelope" aria-hidden="true"></i> {{user.email}}</p>
+                    <h5><i class="fa fa-envelope" aria-hidden="true"></i> {{user.email}}</h5>
                     <p><i class="glyphicon glyphicon-phone-alt" aria-hidden="true"></i> {{user.phone}}</p>
                     {{#if user.address.city}}
-                    <p><i class="fa fa-globe" aria-hidden="true"></i> {{user.address.city}}, {{user.address.country}} <a type="button" onclick="addAddress()"><i class="glyphicon glyphicon-pencil"></i> </a></p>
+                    <p><i class="fa fa-street-view" aria-hidden="true"></i> {{user.address.city}}, {{user.address.country}}
+                        {{#if notSharable}} <a type="button" onclick="addAddress()"><i class="glyphicon glyphicon-pencil"></i> </a>{{/if}}</p>
                     {{else}}
                     <i class="glyphicon glyphicon-home"></i> <button type="button" class="btn btn-info btn-md" onclick="addAddress()">Add Address</button>
                     {{/if}}
@@ -36,97 +29,102 @@ function monthAndYear(date) {
         </div>
         <br>
         <br>
+        <!-- showhighlight -->
         <div class="row cardshadow">
             <div class="modal-body">
-                <div id="basic_details">
-                    <p><i class="fa fa-envelope" aria-hidden="true"></i> {{user.email}} <a href="#"><span class="pull-right"> <i class="glyphicon glyphicon-pencil"></i></span></a> </p>
-                    <p><i class="glyphicon glyphicon-phone-alt" aria-hidden="true"></i> {{user.phone}}</p>
-                    {{#if user.address.city}}
-                    <p><i class="fa fa-globe" aria-hidden="true"></i> {{user.address.city}}, {{user.address.country}} <a type="button" onclick="addAddress()"><i class="glyphicon glyphicon-pencil"></i> </a></p>
-                    {{else}}
-                    <i class="glyphicon glyphicon-home"></i> <button type="button" class="btn btn-info btn-md" onclick="addAddress()">Add Address</button>
-                    {{/if}}
+                <div id="showhighlight">
+                    <h5>Highlights
+                        <span class="pull-right">
+                            {{#if notSharable}}<a href="#" type="button" data-toggle="modal" data-target="#addHighlight"><i class="glyphicon glyphicon-pencil"></i></a>{{/if}}
+                        </span>
+                    </h5>
+                    <div class="row">
+                        {{#if highlight}}
+                        {{#each highlight.highlightName}}
+                        <div class="col-sm-4 col-xs-12">
+                            <p id="{{this}}">{{this}}</p>
+                        </div>
+                        {{/each}}
+                        {{/if}}
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- end showhighlight -->
     </div>
     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 ">
         <div class="modal-body">
-            <div class="row ">
-                <div class="col-lg-10 col-md-10 col-sm-10 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-12 ">
-                    <div class="row">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h5><i class="glyphicon glyphicon-user"></i> Profile Overview
-                                    <span class="pull-right">
-                                        {{#if user.profile_overview}}
-                                        <a href="#" type="button" data-toggle="modal" data-target="#editOverview"><i class="glyphicon glyphicon-pencil"></i></a>
-                                        {{else}}
-                                        <a href="#" type="button" data-toggle="modal" data-target="#editOverview"><i class="glyphicon glyphicon-plus"></i>Add Overview</a>
-                                        {{/if}}
-                                    </span>
-                                </h5>
+            <div class="row " style="padding-left: 5%">
+                <!-- profile_overview -->
+                <div class="row">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h5><i class="glyphicon glyphicon-user"></i> Profile Overview
+                                <span class="pull-right">
+                                    {{#if user.profile_overview}}
+                                    {{#if notSharable}}<a href="#" type="button" data-toggle="modal" data-target="#editOverview"><i class="glyphicon glyphicon-pencil"></i></a>{{/if}}
+                                    {{else}}
+                                    <a href="#" type="button" data-toggle="modal" data-target="#editOverview"><i class="glyphicon glyphicon-plus"></i>Add Overview</a>
+                                    {{/if}}
+                                </span>
+                            </h5>
+                        </div>
+                        <div class="panel-body">
+                            {{#if user.profile_overview}}
+                            <div id="profile_overview_information">
+                                <p>{{user.profile_overview}}</p>
                             </div>
-                            <div class="panel-body">
-                                {{#if user.profile_overview}}
-                                <div id="profile_overview_information">
-                                    <p>{{user.profile_overview}}</p>
-                                </div>
-                                {{/if}}
-                            </div>
+                            {{/if}}
                         </div>
                     </div>
-                    <div class="row">
+                </div>
+                <!-- end profile_overview -->
+                <!-- show experience -->
+                <div class="row">
+                    <div id="experience_block">
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h5><i class="fa fa-briefcase" aria-hidden="true"></i> Experience and Projects
+                                <h5><i class="fa fa-briefcase" aria-hidden="true" style="color:#7f03fc"></i> Experience and Projects
                                     <span class="pull-right">
-                                        <a href="#" type="button" data-toggle="modal" data-target="#addExperience"><i class="glyphicon glyphicon-plus"></i> Add more experience</a>
+                                        {{#if notSharable}}<a href="#" type="button" data-toggle="modal" data-target="#addExperience"><i class="glyphicon glyphicon-plus"></i> Add more experience</a>{{/if}}
                                     </span>
                                 </h5>
                             </div>
                             <br>
                             <div class="panel-body">
                                 {{#if experience}}
-                                {{#each experience}}
+                                {{#each experience as |parent|}}
                                 <div class="row">
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                         <i class="fa fa-circle" aria-hidden="true"></i> <b style="color:#7f03fc"> {{this.job_title}} </b>
                                         <div class="modal-body">
-                                            <p><i class="fa fa-building" aria-hidden="true"></i>
-                                                {{this.company_name}} <i class="fa fa-building" aria-hidden="true"></i>
-                                                {{this.location}} </p>
+                                            <h5 style="word-spacing: 4px;"><i class="fa fa-building" aria-hidden="true"></i>
+                                                {{this.company_name}} | <i class="fa fa-street-view" aria-hidden="true"></i> {{this.location}} </h5>
                                             <small> {{this.description}} </small>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <div class="row pull-right">
                                             <h6>
-                                                <div class="col-sm-2 col-xs-2"></div>
-                                                <div class="col-sm-8 col-xs-8">
-                                                    <div id="experiemce_date_show{{this._id}}" style="word-spacing: 4px;"></div>
+                                                <div class="col-sm-10 col-xs-10">
+                                                    <div style="word-spacing: 4px;">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i> {{dateFormat this.start_date "MMMM YYYY"}} - {{dateFormat this.end_date "MMMM YYYY"}}
+                                                    </div>
                                                 </div>
                                                 <div class="col-sm-1 col-xs-1">
-                                                    <a href="#" onclick="fillEditExperience('{{this.company_name}}','{{this.location}}','{{this.job_title}}','{{this.description}}','{{this._id}}','{{this.start_date}}','{{this.end_date}}');">
+                                                    <a href="#" class="btnTest" onclick="fillEditExperience('{{this.company_name}}','{{this.location}}','{{this.job_title}}','{{this.description}}','{{this._id}}','{{this.start_date}}','{{this.end_date}}','{{this.location}}');">
                                                         <i class="glyphicon glyphicon-pencil"></i>
                                                     </a>
                                                 </div>
-                                                <div class="col-sm-1 col-xs-1"></div>
+                                                <div class="col-sm-1 col-xs-1"> </div>
                                             </h6>
                                         </div>
-                                        <script>
-                                            d1 = new  Date('{{this.start_date}}');
-                                            d2 = new  Date('{{this.end_date}}');
-                                            var start_date =  monthAndYear(d1);
-                                            var end_date =  monthAndYear(d2);
-                                            document.getElementById('experiemce_date_show{{this._id}}').innerHTML ='<i class="fa fa-calendar" aria-hidden="true"></i> ' + start_date[0] + ' ' + start_date[1] + ' - ' +  end_date[0] + ' ' + end_date[1]
-                                        </script>
                                     </div>
                                 </div>
                                 <div class="modal-body">
                                     <h5> Projects
                                         <span class="pull-right">
-                                            <a href="#" type="button" onclick="addAddress()"><i class="glyphicon glyphicon-plus"></i> Add more projects</a>
+                                            <a href="#" type="button" class="addProjectButton" onclick="addMoreProject('{{this._id}}')"><i class="glyphicon glyphicon-plus"></i> Add More Project</a>
                                         </span>
                                     </h5>
                                     <div class="row">
@@ -134,32 +132,26 @@ function monthAndYear(date) {
                                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                             <i class="fa fa-circle" aria-hidden="true"></i> {{this.project_name}}
                                             <div class="modal-body">
-                                                <p> {{this.skills}} </p>
-                                                <small> {{this.description}} </small>
+                                                <p style="word-spacing: 5px;"> {{this.skills}} </p>
+                                                <small style="word-spacing: 5px;"> {{this.description}} </small>
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <div class="row pull-right">
                                                 <h6>
-                                                    <div class="col-sm-1 col-xs-1"></div>
-                                                    <div class="col-sm-8 col-xs-10">
-                                                        <div id="project_date_show{{this._id}}" style="word-spacing: 4px;"></div>
+                                                    <div class="col-sm-10 col-xs-10">
+                                                        <div style="word-spacing: 4px;">
+                                                            <i class="fa fa-calendar" aria-hidden="true"></i> {{dateFormat this.start_date "MMMM YYYY"}} - {{dateFormat this.end_date "MMMM YYYY"}}
+                                                        </div>
                                                     </div>
                                                     <div class="col-sm-1 col-xs-1">
-                                                        <a href="#" onclick="fillEditExperience('{{this.company_name}}','{{this.location}}','{{this.job_title}}','{{this.description}}','{{this._id}}','{{this.start_date}}','{{this.end_date}}');">
+                                                        <a href="#" class="editProjectButton" onclick="fillEditProject('{{this.project_name}}','{{this.skills}}','{{this.description}}','{{this._id}}','{{this.start_date}}','{{this.end_date}}','{{this.app_link}}','{{parent._id}}');">
                                                             <i class="glyphicon glyphicon-pencil"></i>
                                                         </a>
                                                     </div>
                                                     <div class="col-sm-1 col-xs-1"></div>
                                                 </h6>
                                             </div>
-                                            <script>
-                                                d1 = new  Date('{{this.start_date}}');
-                                                d2 = new  Date('{{this.end_date}}');
-                                                var start_date =  monthAndYear(d1);
-                                                var end_date =  monthAndYear(d2);
-                                                document.getElementById('project_date_show{{this._id}}').innerHTML ='<i class="fa fa-calendar" aria-hidden="true"></i> ' + start_date[0] + ' ' + start_date[1] + ' - ' +  end_date[0] + ' ' + end_date[1]
-                                            </script>
                                         </div>
                                         {{/each}}
                                     </div>
@@ -169,12 +161,16 @@ function monthAndYear(date) {
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                </div>
+                <!--end show experience -->
+                <!-- show education -->
+                <div class="row">
+                    <div class="education_block">
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <h5><i class="fa fa-book" aria-hidden="true"></i> Education
+                                <h5><i class="fa fa-book" aria-hidden="true" style="color:#7f03fc"></i> Education
                                     <span class="pull-right">
-                                        <a href="#" type="button" data-toggle="modal" data-target="#addEducation"><i class="glyphicon glyphicon-plus"></i> Add more education</a>
+                                        {{#if notSharable}}<a href="#" type="button" data-toggle="modal" data-target="#addEducation"><i class="glyphicon glyphicon-plus"></i> Add more education</a>{{/if}}
                                     </span>
                                 </h5>
                             </div>
@@ -184,135 +180,28 @@ function monthAndYear(date) {
                                 {{#each education}}
                                 <div class="row">
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <i class="fa fa-circle" aria-hidden="true"></i> {{this.degree}}
+                                        <i class="fa fa-circle" aria-hidden="true"></i> <b style="color:#7f03fc">{{this.degree}}</b>
                                         <div class="modal-body">
-                                            <p><i class="fa fa-building" aria-hidden="true"></i>
-                                                {{this.institute_name}} <i class="fa fa-building" aria-hidden="true"></i>
-                                                {{this.location}} </p>
+                                            <h5 style="word-spacing: 4px;"><i class="fa fa-building" aria-hidden="true"></i>
+                                                {{this.institute_name}} | <i class="fa fa-street-view" aria-hidden="true"></i> {{this.location}} </h5>
                                             <small> {{this.description}} </small>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <div class="row pull-right">
                                             <h6>
-                                                <div class="col-sm-2 col-xs-2"></div>
-                                                <div class="col-sm-8 col-xs-8">
-                                                    <div id="education_date_show{{this._id}}" style="word-spacing: 4px;"></div>
+                                                <div class="col-sm-10 col-xs-10">
+                                                    <div style="word-spacing: 4px;">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i> {{dateFormat this.start_date "MMMM YYYY"}} - {{dateFormat this.end_date "MMMM YYYY"}}
+                                                    </div>
                                                 </div>
                                                 <div class="col-sm-1 col-xs-1">
-                                                    <a href="#" type="button" onclick="fillEditEducation('{{this.degree}}','{{this.institute_name}}','{{this._id}}','{{this.description}}','{{this.location}}','{{this.start_date}}','{{this.end_date}}');">
+                                                    <a href="#" type="button" class="editEducationButton" onclick="fillEditEducation('{{this.degree}}','{{this.institute_name}}','{{this._id}}','{{this.description}}','{{this.location}}','{{this.start_date}}','{{this.end_date}}','{{this.location}}');">
                                                         <i class="glyphicon glyphicon-pencil"></i></a>
                                                 </div>
                                                 <div class="col-sm-1 col-xs-1"></div>
                                             </h6>
                                         </div>
-                                        <script>
-                                            d1 = new  Date('{{this.start_date}}');
-                                            d2 = new  Date('{{this.end_date}}');
-                                            var start_date =  monthAndYear(d1);
-                                            var end_date =  monthAndYear(d2);
-                                            document.getElementById('education_date_show{{this._id}}').innerHTML ='<i class="fa fa-calendar" aria-hidden="true"></i> ' + start_date[0] + ' ' + start_date[1] + ' - ' +  end_date[0] + ' ' + end_date[1]
-                                        </script>
-                                    </div>
-                                </div>
-                                {{/each}}
-                                {{/if}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h5><i class="fa fa-book" aria-hidden="true"></i> Certifications
-                                    <span class="pull-right">
-                                        <a href="#" type="button" data-toggle="modal" data-target="#addCertificate"><i class="glyphicon glyphicon-plus"></i> Add more certifications</a>
-                                    </span>
-                                </h5>
-                            </div>
-                            <br>
-                            <div class="panel-body">
-                                <div>
-                                    {{#if certificate}}
-                                    {{#each certificate}}
-                                    <div class="row">
-                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                            <i class="fa fa-circle" aria-hidden="true"></i> {{this.certificate_name}}
-                                            <div class="modal-body">
-                                                <p><i class="fa fa-building" aria-hidden="true"></i>
-                                                    {{this.institute_name}} <i class="fa fa-building" aria-hidden="true"></i>
-                                                    {{this.location}} </p>
-                                                <small> {{this.description}} </small>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <div class="row pull-right">
-                                                <h6>
-                                                    <div class="col-sm-2 col-xs-2"></div>
-                                                    <div class="col-sm-8 col-xs-8">
-                                                        <div id="certificate_date_show{{this._id}}" style="word-spacing: 4px;"></div>
-                                                    </div>
-                                                    <div class="col-sm-1 col-xs-1">
-                                                        <a href="#" type="button" onclick="fillEditCertificate('{{this.institute_name}}','{{this.certificate_name}}','{{this._id}}','{{this.description}}','{{this.start_date}}','{{this.end_date}}');">
-                                                            <i class="glyphicon glyphicon-pencil"></i></a>
-                                                    </div>
-                                                    <div class="col-sm-1 col-xs-1"></div>
-                                                </h6>
-                                            </div>
-                                            <script>
-                                                d1 = new  Date('{{this.start_date}}');
-                                                d2 = new  Date('{{this.end_date}}');
-                                                var start_date =  monthAndYear(d1);
-                                                var end_date =  monthAndYear(d2);
-                                                document.getElementById('certificate_date_show{{this._id}}').innerHTML ='<i class="fa fa-calendar" aria-hidden="true"></i> ' + start_date[0] + ' ' + start_date[1] + ' - ' +  end_date[0] + ' ' + end_date[1]
-                                            </script>
-                                        </div>
-                                    </div>
-                                    {{/each}}
-                                    {{/if}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h5><i class="fa fa-book" aria-hidden="true"></i> Awards, Events And Publications
-                                    <span class="pull-right">
-                                        <a href="#" type="button" data-toggle="modal" data-target="#addAward"><i class="glyphicon glyphicon-plus"></i> Add more events</a>
-                                    </span>
-                                </h5>
-                            </div>
-                            <br>
-                            <div class="panel-body">
-                                {{#if award}}
-                                {{#each award}}
-                                <div class="row">
-                                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                        <i class="fa fa-circle" aria-hidden="true"></i> {{this.award_name}}
-                                        <div class="modal-body">
-                                            <p><i class="fa fa-building" aria-hidden="true"></i>
-                                                {{this.institute_name}} </p>
-                                            <small> {{this.description}} </small>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                        <div class="row pull-right">
-                                            <h6>
-                                                <div class="col-sm-8 col-xs-8 ">
-                                                    <div id="award_date_show{{this._id}}" style="word-spacing: 5px;"></div>
-                                                </div>
-                                                <div class="col-sm-1 col-xs-1">
-                                                    <a href="#" type="button" onclick="fillEditAward('{{this.award_name}}','{{this.institute_name}}','{{this._id}}','{{this.description}}','{{this.date}}');">
-                                                        <i class="glyphicon glyphicon-pencil"></i></a>
-                                                </div>
-                                                <div class="col-sm-2 col-xs-2"></div>
-                                            </h6>
-                                        </div>
-                                        <script>
-                                            d1 = new  Date('{{this.date}}');
-                                            var date =  monthAndYear(d1);
-                                            document.getElementById('award_date_show{{this._id}}').innerHTML ='<i class="fa fa-calendar" aria-hidden="true"></i> ' + date[0] + ' ' + date[1]
-                                        </script>
                                     </div>
                                 </div>
                                 {{/each}}
@@ -321,11 +210,105 @@ function monthAndYear(date) {
                         </div>
                     </div>
                 </div>
+                <!--end show education -->
+                <!-- show Certifications -->
+                <div class="row">
+                    <div id="certificate_block">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h5 style="word-spacing: 4px;"><i class="fa fa-address-card" aria-hidden="true" style="color:#7f03fc"></i> Certifications
+                                    <span class="pull-right">
+                                        {{#if notSharable}}<a href="#" type="button" data-toggle="modal" data-target="#addCertificate"><i class="glyphicon glyphicon-plus"></i> Add more certifications</a>{{/if}}
+                                    </span>
+                                </h5>
+                            </div>
+                            <br>
+                            <div class="panel-body">
+                                {{#if certificate}}
+                                {{#each certificate}}
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                        <i class="fa fa-circle" aria-hidden="true"></i> <b style="color:#7f03fc">{{this.certificate_name}}</b>
+                                        <div class="modal-body">
+                                            <h5 style="word-spacing: 4px;"><i class="fa fa-building" aria-hidden="true"></i> {{this.institute_name}} | <i class="fa fa-street-view" aria-hidden="true"></i> {{this.location}} </h5>
+                                            <small> {{this.description}} </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="row pull-right">
+                                            <h6>
+                                                <div class="col-sm-10 col-xs-10">
+                                                    <div style="word-spacing: 4px;">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i> {{dateFormat this.start_date "MMMM YYYY"}} - {{dateFormat this.end_date "MMMM YYYY"}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-1 col-xs-1">
+                                                    <a href="#" type="button" class="editCertificateButton" onclick="fillEditCertificate('{{this.institute_name}}','{{this.certificate_name}}','{{this._id}}','{{this.description}}','{{this.start_date}}','{{this.end_date}}','{{this.location}}');">
+                                                        <i class="glyphicon glyphicon-pencil"></i></a>
+                                                </div>
+                                                <div class="col-sm-1 col-xs-1">
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- show award -->
+                <div class="row">
+                    <div id="award_block">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h5 style="word-spacing: 4px;"><i class="fa fa-trophy" aria-hidden="true"></i> Awards, Events And Publications
+                                    <span class="pull-right">
+                                        {{#if notSharable}}<a href="#" type="button" data-toggle="modal" data-target="#addAward"><i class="glyphicon glyphicon-plus"></i> Add more events</a>{{/if}}
+                                    </span>
+                                </h5>
+                            </div>
+                            <br>
+                            <div class="panel-body">
+                                {{#if award}}
+                                {{#each award}}
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                        <i class="fa fa-circle" aria-hidden="true" style="color:#7f03fc"></i> <b style="color:#7f03fc">{{this.award_name}}</b>
+                                        <div class="modal-body">
+                                            <h5 style="word-spacing: 5px;"><i class="fa fa-building" aria-hidden="true"></i> {{this.institute_name}} </h5><small> {{this.description}} </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="row pull-right">
+                                            <h6>
+                                                <div class="col-sm-10 col-xs-10 ">
+                                                    <div style="word-spacing: 5px;">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i> {{dateFormat this.start_date "MMMM YYYY"}} - {{dateFormat this.end_date "MMMM YYYY"}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-1 col-xs-1">
+                                                    <a href="#" type="button" class="editAwardButton" onclick="fillEditAward('{{this.award_name}}','{{this.institute_name}}','{{this._id}}','{{this.description}}','{{this.date}}');">
+                                                        <i class="glyphicon glyphicon-pencil"></i></a>
+                                                </div>
+                                                <div class="col-sm-1 col-xs-1"></div>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end  show award -->
             </div>
         </div>
     </div>
 </div>
-<!-- Modal -->
+
+<!-- Modal for editOverview -->
 <div class="modal fade" id="editOverview" role="dialog">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
@@ -349,13 +332,15 @@ function monthAndYear(date) {
         </div>
     </div>
 </div>
-<!-- Modal -->
+<!--end  Modal for editOverview -->
+
+<!-- Modal for Add experience-->
 <div class="modal fade" id="addExperience" role="dialog">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" onclick="removeProject()">&times;</button>
                 <h4 class="modal-title">Add Experience</h4>
             </div>
             <div class="modal-body">
@@ -398,12 +383,12 @@ function monthAndYear(date) {
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
                                 <label>Location</label>
-                                <input type="text" class="form-control" id="experience_location" required />
+                                <input type="text" class="form-control input_height" id="experience_location" required />
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                     <br>
                     <div class="form-group">
@@ -426,13 +411,15 @@ function monthAndYear(date) {
         </div>
     </div>
 </div>
-<!-- Modal -->
+<!--end Modal for experience -->
+
+<!-- Modal for edit experience-->
 <div class="modal fade" id="editExperience" role="dialog">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal" onclick="removeProject()">&times;</button>
                 <h4 class="modal-title">Edit Experience</h4>
             </div>
             <div class="modal-body">
@@ -475,12 +462,12 @@ function monthAndYear(date) {
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
                                 <label>Location</label>
-                                <input type="text" class="form-control" id="eexperience_location" required />
+                                <input type="text" class="form-control input_height" id="eexperience_location" required />
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                     <br>
                     <div class="form-group">
@@ -503,399 +490,9 @@ function monthAndYear(date) {
         </div>
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="addEducation" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <!-- class="form-horizontal" -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Education</h4>
-            </div>
-            <div class="modal-body">
-                <form method="post" id="add-education">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>degree</label>
-                                <input type="text" class="form-control input_height" id="degree" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label>Start Date</label>
-                                <div class='input-group date datetimepicker1'>
-                                    <input type='text' class="form-control input_height" id="education_start_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label>End Date</label>
-                                <div class='input-group date datetimepicker2'>
-                                    <input type='text' class="form-control input_height" id="education_end_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Institute Name</label>
-                                <input type="text" class="form-control input_height" id="institute_name" required>
-                            </div>
-                        </div>
-                        <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>location</label>
-                                <input type="text" class="form-control input_height" id="education_location" placeholder="country" required>
-                            </div>
-                        </div> -->
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <label>description</label>
-                            <textarea class="form-control" rows="4" id="education_description" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="editEducation" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <!-- class="form-horizontal" -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit Education</h4>
-            </div>
-            <div class="modal-body">
-                <form method="post" id="edit-education">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>degree</label>
-                                <input type="text" class="form-control input_height" id="edegree" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label>Start Date</label>
-                                <div class='input-group date datetimepicker1'>
-                                    <input type='text' class="form-control input_height" id="eeducation_start_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label>End Date</label>
-                                <div class='input-group date datetimepicker2'>
-                                    <input type='text' class="form-control input_height" id="eeducation_end_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Institute Name</label>
-                                <input type="text" class="form-control input_height" id="einstitute_name" required>
-                            </div>
-                        </div>
-                        <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>location</label>
-                                <input type="text" class="form-control input_height" id="eeducation_location" placeholder="country" required>
-                            </div>
-                        </div> -->
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <label>description</label>
-                            <textarea class="form-control" rows="4" id="eeducation_description" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="addCertificate" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Certification</h4>
-            </div>
-            <div class="modal-body">
-                <form method="post" id="add-certificate">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Certificate Name</label>
-                                <input type="text" class="form-control input_height" id="certificate_name" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label>Start Date</label>
-                                <div class='input-group date datetimepicker1'>
-                                    <input type='text' class="form-control input_height" id="certificate_start_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label>End Date</label>
-                                <div class='input-group date datetimepicker2'>
-                                    <input type='text' class="form-control input_height" id="certificate_end_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Institute Name</label>
-                                <input type="text" class="form-control input_height" id="certificate_institute_name" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <!-- <div class="form-group">
-                                <label>Location</label>
-                                <input type="text" class="form-control input_height" name="certificate_location" required>
-                            </div> -->
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-                            <label>Description</label>
-                            <textarea class="form-control" rows="4" id="certificate_description" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="editCertificate" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit Certification</h4>
-            </div>
-            <div class="modal-body">
-                <form method="put" id="edit-certificate">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Certificate Name</label>
-                                <input type="text" class="form-control input_height" id="ecertificate_name" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label>Start Date</label>
-                                <div class='input-group date datetimepicker1'>
-                                    <input type='text' class="form-control input_height" id="ecertificate_start_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <label>End Date</label>
-                                <div class='input-group date datetimepicker2'>
-                                    <input type='text' class="form-control input_height" id="ecertificate_end_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Institute Name</label>
-                                <input type="text" class="form-control input_height" id="ecertificate_institute_name" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <!-- <div class="form-group">
-                                <label>Location</label>
-                                <input type="text" class="form-control input_height" name="certificate_location" required>
-                            </div> -->
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-                            <label>Description</label>
-                            <textarea class="form-control" rows="4" id="ecertificate_description" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="addAward" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add Award</h4>
-            </div>
-            <div class="modal-body">
-                <form method="post" id="add-award">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label>Institute Name</label>
-                                <input type="text" class="form-control input_height" id="award_institute_name" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label>Award/Event/Publication Name</label>
-                                <input type="text" class="form-control input_height" id="award_name" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label>Date of Award/Event/Publication</label>
-                                <div class='input-group date datetimepicker1'>
-                                    <input type='text' class="form-control input_height" id="award_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <label>Description</label>
-                            <textarea class="form-control" rows="4" id="award_description" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="editAward" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit Award</h4>
-            </div>
-            <div class="modal-body">
-                <form method="put" id="edit-award">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label>Institute Name</label>
-                                <input type="text" class="form-control input_height" id="eaward_institute_name" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label>Award/Event/Publication Name</label>
-                                <input type="text" class="form-control input_height" id="eaward_name" required>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label>Date of Award/Event/Publication</label>
-                                <div class='input-group date datetimepicker1'>
-                                    <input type='text' class="form-control input_height" id="eaward_date" placeholder="DD/MM/YYYY" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <label>Description</label>
-                            <textarea class="form-control" rows="4" id="eaward_description" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
+<!--end Modal for edit experience-->
+
+<!-- Modal for add projects-->
 <div class="modal fade" id="addProject" role="dialog">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
@@ -968,9 +565,573 @@ function monthAndYear(date) {
         </div>
     </div>
 </div>
+<!--end Modal for add projectse-->
+
+<!-- Modal for edit projects-->
+<div class="modal fade" id="EditProject" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Project</h4>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" role="form" id="edit-project">
+                    <div class="row">
+                        <div class="Col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label>Project Name</label>
+                                <input type="text" class="form-control input_height" id="eproject_name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Skills</label>
+                                <input type="text" class="form-control input_height" id="eskills" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>App Link</label>
+                                <input type="text" class="form-control input_height" id="eapp_link" required>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <div class='input-group date datetimepicker1'>
+                                    <input type='text' class="form-control input_height" id="eproject_start_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <div class='input-group date datetimepicker2'>
+                                    <input type='text' class="form-control input_height" id="eproject_end_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" rows="4" id="eproject_description" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" type="submit"><i class="fa fa-paper-plane"></i> Submit</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end Modal for edit projects-->
+
+<!-- Modal for Add education-->
+<div class="modal fade" id="addEducation" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <!-- class="form-horizontal" -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Education</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="add-education">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>degree</label>
+                                <input type="text" class="form-control input_height" id="degree" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <div class='input-group date datetimepicker1'>
+                                    <input type='text' class="form-control input_height" id="education_start_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <div class='input-group date datetimepicker2'>
+                                    <input type='text' class="form-control input_height" id="education_end_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Institute Name</label>
+                                <input type="text" class="form-control input_height" id="institute_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>location</label>
+                                <input type="text" class="form-control input_height" id="education_location" placeholder="country" required>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label>description</label>
+                            <textarea class="form-control" rows="4" id="education_description" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end Modal for Add education-->
+
+<!-- Modal for edit education-->
+<div class="modal fade" id="editEducation" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <!-- class="form-horizontal" -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Education</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="edit-education">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>degree</label>
+                                <input type="text" class="form-control input_height" id="edegree" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <div class='input-group date datetimepicker1'>
+                                    <input type='text' class="form-control input_height" id="eeducation_start_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <div class='input-group date datetimepicker2'>
+                                    <input type='text' class="form-control input_height" id="eeducation_end_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Institute Name</label>
+                                <input type="text" class="form-control input_height" id="einstitute_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>location</label>
+                                <input type="text" class="form-control input_height" id="eeducation_location" placeholder="country" required>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label>description</label>
+                            <textarea class="form-control" rows="4" id="eeducation_description" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end Modal for edit education-->
+
+<!-- Modal for ddCertificate-->
+<div class="modal fade" id="addCertificate" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Certification</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="add-certificate">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Certificate Name</label>
+                                <input type="text" class="form-control input_height" id="certificate_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <div class='input-group date datetimepicker1'>
+                                    <input type='text' class="form-control input_height" id="certificate_start_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <div class='input-group date datetimepicker2'>
+                                    <input type='text' class="form-control input_height" id="certificate_end_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Institute Name</label>
+                                <input type="text" class="form-control input_height" id="certificate_institute_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" class="form-control input_height" id="certificate_location" required>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                            <label>Description</label>
+                            <textarea class="form-control" rows="4" id="certificate_description" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end Modal for ddCertificate-->
+
+<!-- Modal editCertificate-->
+<div class="modal fade" id="editCertificate" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Certification</h4>
+            </div>
+            <div class="modal-body">
+                <form method="put" id="edit-certificate">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Certificate Name</label>
+                                <input type="text" class="form-control input_height" id="ecertificate_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <div class='input-group date datetimepicker1'>
+                                    <input type='text' class="form-control input_height" id="ecertificate_start_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <div class='input-group date datetimepicker2'>
+                                    <input type='text' class="form-control input_height" id="ecertificate_end_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Institute Name</label>
+                                <input type="text" class="form-control input_height" id="ecertificate_institute_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" class="form-control input_height" id="ecertificate_location" required>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                            <label>Description</label>
+                            <textarea class="form-control" rows="4" id="ecertificate_description" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end Modal editCertificate-->
+
+<!-- Modal for  addAward-->
+<div class="modal fade" id="addAward" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Award</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="add-award">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>Institute Name</label>
+                                <input type="text" class="form-control input_height" id="award_institute_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>Award/Event/Publication Name</label>
+                                <input type="text" class="form-control input_height" id="award_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>Date of Award/Event/Publication</label>
+                                <div class='input-group date datetimepicker1'>
+                                    <input type='text' class="form-control input_height" id="award_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label>Description</label>
+                            <textarea class="form-control" rows="4" id="award_description" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end Modal for  addAward-->
+
+<!-- Modal for editAward-->
+<div class="modal fade" id="editAward" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Award</h4>
+            </div>
+            <div class="modal-body">
+                <form method="put" id="edit-award">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>Institute Name</label>
+                                <input type="text" class="form-control input_height" id="eaward_institute_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>Award/Event/Publication Name</label>
+                                <input type="text" class="form-control input_height" id="eaward_name" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label>Date of Award/Event/Publication</label>
+                                <div class='input-group date datetimepicker1'>
+                                    <input type='text' class="form-control input_height" id="eaward_date" placeholder="DD/MM/YYYY" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label>Description</label>
+                            <textarea class="form-control" rows="4" id="eaward_description" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end Modal for editAward-->
+
+<!-- Modal for addHighlight-->
+<div class="modal fade" id="addHighlight" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" onclick="removeHeighlights()">&times;</button>
+                <h4 class="modal-title">Add/Edit Highlights</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="Col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <p>Please add the top highlights of your profile. For eg. React Ninja, Amazon, Software Architect, etc.(Add highlights by pressing Enter)</p>
+                            <input type="text" class="form-control input_height" id="highlightName" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="Col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div id="allHighlights">
+                            {{#if highlight}}
+                            {{#each highlight.highlightName}}
+                            <button class="btn btn-info" id="{{this}}" style="margin-left : 20px;border-radius: 10px" onclick="removeItems(this)">{{this}} <i class="fa fa-times" style="margin-left : 8px"></i></button>
+                            {{/each}}
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="highlights" type="submit"><i class="fa fa-paper-plane"></i> Submit</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="removeHeighlights()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end Modal for addHighlight-->
+
+
 <script src="../controllers/project.js"></script>
 <script src="../controllers/experience.js"></script>
 <script src="../controllers/education.js"></script>
 <script src="../controllers/certificate.js"></script>
 <script src="../controllers/award.js"></script>
 <script src="../controllers/profile.js"></script>
+<script type="text/javascript">
+var sharable = '{{notSharable}}';
+if (sharable == 'false') {
+    $(".editProjectButton").remove();
+    $(".btnTest").remove();
+    $(".editEducationButton").remove();
+    $(".editCertificateButton").remove();
+    $(".editAwardButton").remove();
+    $(".addProjectButton").remove();
+}
+var input = document.querySelector('input[type=file]');
+
+input.onchange = function() {
+    var file = input.files[0];
+
+    let data = new FormData();
+    data.append('file', file, file.name);
+    axios.post('/profile/addimage/{{user._id}}', data, {
+            headers: {
+                'accept': 'application/json',
+                'Accept-Language': 'en-US,en;q=0.8',
+                'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+            }
+        })
+        .then((response) => {
+            console.log(response)
+        }).catch((error) => {
+            console.log(error)
+        });
+    displayAsImage(file);
+};
+
+function displayAsImage(file) {
+    var imgURL = URL.createObjectURL(file);
+    img = document.getElementById('showimage');
+    img.src = imgURL;
+}
+
+$("#upfile1").click(function() {
+    $("#file1").trigger('click');
+});
+</script>

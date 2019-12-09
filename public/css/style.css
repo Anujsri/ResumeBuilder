@@ -5,15 +5,21 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    padding-top: 90px;
+    padding-top: 5%;
 }
 
 p {
-    font-size: 1.2em;
+    font-size: 1em;
     line-height: 1.8em;
-    font-weight: 300;
+    font-weight: 400;
     color: #555;
 
+}
+
+.swal2-popup {
+    font-size: 1.6rem !important;
+    height: 90px;
+    padding: 0px;
 }
 
 .upload-btn-wrapper {
@@ -33,6 +39,11 @@ p {
     left: 0;
     top: 0;
     opacity: 0;
+}
+
+.limiter {
+    width: 100%;
+    margin: 0 auto;
 }
 
 .input_height {
@@ -210,4 +221,286 @@ strong {
 
 footer {
     margin-top: 40px;
+}
+
+
+.top-content2 {
+    padding: 120px 0 150px 0;
+}
+
+@media (max-width: 767px) {
+    .navbar {
+        padding-top: 0;
+        background: #1F4788;
+    }
+
+    .navbar>.container .navbar-brand,
+    .navbar>.container-fluid .navbar-brand {
+        margin-left: 15px;
+    }
+
+    .navbar-collapse {
+        border: 0;
+    }
+
+    .navbar-inverse .navbar-toggle {
+        border-color: transparent;
+    }
+
+    .navbar-inverse ul.navbar-nav li a.btn-link-3 {
+        margin: 10px;
+    }
+
+    .section-description p {
+        padding: 0;
+    }
+
+    .top-content {
+        padding: 40px 0 60px 0;
+    }
+
+    .top-content1 {
+        padding: 40px 0 60px 0;
+    }
+
+    .top-content2 {
+        padding: 40px 0 60px 0;
+    }
+
+    .features-box {
+        text-align: center;
+    }
+
+    .features-box h3 {
+        margin-top: 5px;
+        padding-top: 10px;
+    }
+}
+
+.wrap-input100 {
+    width: 100%;
+    position: relative;
+    border-bottom: 2px solid #dbdbdb;
+    margin-bottom: 30px;
+}
+
+.input100 {
+    display: block;
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    font-family: Poppins-Regular;
+    font-size: 22px;
+    color: #555555;
+    line-height: 1.2;
+    padding: 0 2px;
+}
+
+.validate-input {
+    position: relative;
+}
+
+.label-input100 {
+    font-family: Poppins-SemiBold;
+    font-size: 18px;
+    color: #999999;
+    line-height: 1.2;
+    padding-left: 2px;
+}
+
+.input100 {
+    display: block;
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    font-family: Poppins-Regular;
+    font-size: 22px;
+    color: #555555;
+    line-height: 1.2;
+    padding: 0 2px;
+}
+
+.txt3 {
+    font-family: Poppins-Regular;
+    font-size: 16px;
+    color: #666666;
+    line-height: 1.4;
+}
+
+.focus-input100 {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.focus-input100::before {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+
+    background: #d5007d;
+    background: -webkit-linear-gradient(45deg, #d5007d, #e53935);
+    background: -o-linear-gradient(45deg, #d5007d, #e53935);
+    background: -moz-linear-gradient(45deg, #d5007d, #e53935);
+    background: linear-gradient(45deg, #d5007d, #e53935);
+}
+
+
+.input100:focus+.focus-input100::before {
+    width: 100%;
+}
+
+.has-val.input100+.focus-input100::before {
+    width: 100%;
+}
+
+.container-login100-form-btn {
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login100-form {
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.login100-form-title {
+    display: block;
+    width: 100%;
+    font-family: Poppins-Bold;
+    font-size: 39px;
+    color: #333333;
+    line-height: 1.2;
+    text-align: left;
+}
+
+.container-login100 {
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.login100-form-btn {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    min-width: 244px;
+    height: 50px;
+
+    font-family: Poppins-Medium;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.login100-more {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: calc(100% - 520px);
+    position: relative;
+    z-index: 1;
+}
+
+.login100-more::before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #e8519e;
+    background: -webkit-linear-gradient(bottom, #e8519e, #c77ff2);
+    background: -o-linear-gradient(bottom, #e8519e, #c77ff2);
+    background: -moz-linear-gradient(bottom, #e8519e, #c77ff2);
+    background: linear-gradient(bottom, #e8519e, #c77ff2);
+    opacity: 0.7;
+}
+
+.wrap-login100 {
+    width: 520px;
+    min-height: 100vh;
+    background: #fff;
+    border-radius: 2px;
+    position: relative;
+}
+
+.login100-form-bgbtn {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 300%;
+    background: #e8519e;
+    background: -webkit-linear-gradient(top, #e8519e, #c77ff2, #e8519e, #c77ff2);
+    background: -o-linear-gradient(top, #e8519e, #c77ff2, #e8519e, #c77ff2);
+    background: -moz-linear-gradient(top, #e8519e, #c77ff2, #e8519e, #c77ff2);
+    background: linear-gradient(top, #e8519e, #c77ff2, #e8519e, #c77ff2);
+    bottom: -100%;
+    left: 0;
+
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}
+
+.wrap-login100-form-btn {
+    display: block;
+    position: relative;
+    z-index: 1;
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.wrap-login100-form-btn:hover .login100-form-bgbtn {
+    bottom: 0;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Responsive ]*/
+
+@media (max-width: 576px) {
+    .wrap-login100 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 }

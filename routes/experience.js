@@ -31,7 +31,6 @@ router.post('/experience/:id', ensureAuthenticated, (req, res) => {
 
 
 router.put('/experience/:id', ensureAuthenticated, (req, res) => {
-
     let message;
     var experience_id = req.params.id;
     Experience.findById(experience_id)
@@ -40,16 +39,27 @@ router.put('/experience/:id', ensureAuthenticated, (req, res) => {
         })
         .then(function(experience) {
             let arr = []
-            experience.job_title = req.body.job_title;
-            experience.company_name = req.body.company_name;
-            experience.start_date = req.body.start_date;
-            experience.end_date = req.body.end_date;
-            experience.location = req.body.location;
-            experience.description = req.body.description;
             projects = req.body.projects;
+            arr = experience.projects;
 
-            if (projects) {
-                arr = experience.projects;
+            if (projects && projects.length === 'undefined') {
+                console.log("projects length : " + projects.end_date)
+                arr.push(projects);
+                experience.projects = arr;
+            }
+            if (req.body.job_title)
+                experience.job_title = req.body.job_title;
+            if (req.body.company_name)
+                experience.company_name = req.body.company_name;
+            if (req.body.start_date)
+                experience.start_date = req.body.start_date;
+            if (req.body.end_date)
+                experience.end_date = req.body.end_date;
+            if (req.body.location)
+                experience.location = req.body.location;
+            if (req.body.description)
+                experience.description = req.body.description;
+            if (projects && projects.length !== 'undefined') {
                 experience.projects = arr.concat(projects);
             }
             experience.save()
@@ -67,6 +77,28 @@ router.put('/experience/:id', ensureAuthenticated, (req, res) => {
         })
 })
 
+router.put('/editproject/:id', ensureAuthenticated, (req, res) => {
+    let message;
+    var experience_id = req.params.id;
+    projectId = req.body.projectId;
+    Experience.update({ _id: experience_id, 'projects._id': projectId }, {
+            '$set': {
+                'projects.$': req.body
+            }
+        },
+        function(err, experience) {
+            if (err) {
+                console.log(err);
+                res.status(400).send({ message: "Some Error occured", data: {} });
+            } else if (experience) {
+                message = "Experience is changed";
+                res.status(200).send({ message: message, data: experience });
+            } else {
+                message = "Experience not found";
+                res.status(404).send({ message: message, data: {} });
+            }
+        });
+})
 
 router.get('/experience/:id', ensureAuthenticated, (req, res) => {
 
