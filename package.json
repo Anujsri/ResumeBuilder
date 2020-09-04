@@ -26,7 +26,7 @@
     "handlebars-dateformat": "^1.1.1",
     "hbs": "^4.0.6",
     "moment": "^2.24.0",
-    "mongodb": "^3.0.5",
+    "mongodb": "^3.1.13",
     "mongoose": "*",
     "mongoose-dateonly": "^1.0.6",
     "mongoose-unique-validator": "^2.0.3",
