@@ -25,7 +25,7 @@
     "fs-extra": "^8.1.0",
     "handlebars-dateformat": "^1.1.1",
     "hbs": "^4.0.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mongodb": "^3.0.5",
     "mongoose": "*",
     "mongoose-dateonly": "^1.0.6",
